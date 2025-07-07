@@ -8,7 +8,7 @@ This repository contains infrastructure and documentation for my homelab setup.
 |---------------------------------|----------------|-------------------------------------|
 | pve-01                          | 192.168.0.100  | Proxmox Virtual Environment         |
 | k8s-test-control-plane-01       | 192.168.0.200  | Kubernetes Control Plane - Testing  |
-| k8s-test-worker-01              | 192.168.0.201  | Kubernetes Worker - Testitng        |
+| k8s-test-worker-01              | 192.168.0.201  | Kubernetes Worker - Testing         |
 | k8s-test-worker-02              | 192.168.0.202  | Kubernetes Worker -Testing          |
 
 ## Folder Structure
