@@ -1,5 +1,7 @@
 #! /bin/bash
 
+# https://github.com/UntouchedWagons/Ubuntu-CloudInit-Docs/tree/main
+
 VMID=9999
 STORAGE=local-lvm
 USER=devops
