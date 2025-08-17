@@ -1,0 +1,6 @@
+[tools]
+cilium-cli = "latest"
+helm = "latest"
+k9s = "latest"
+kubectl = "latest"
+terraform = "latest"
