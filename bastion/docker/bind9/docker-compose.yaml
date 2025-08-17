@@ -1,6 +1,6 @@
 services:
   bind9:
-    image: internetsystemsconsortium/bind9:9.21
+    image: ubuntu/bind9:latest
     container_name: bind9
     restart: unless-stopped
     ports:
@@ -12,3 +12,17 @@ services:
       - ./records:/var/lib/bind
     environment:
       - TZ=UTC
+
+  bind_exporter:
+    image: prometheus/bind_exporter:latest
+    container_name: bind_exporter
+    restart: unless-stopped
+    ports:
+      - "9119:9119"
+    command:
+      - "--bind.pid-file=/var/run/named/named.pid"
+      - "--bind.timeout=20s"
+      - "--web.listen-address=:9119"
+      - "--bind.stats-url=http://bind9:8053/json/v1/server"
+    depends_on:
+      - bind9

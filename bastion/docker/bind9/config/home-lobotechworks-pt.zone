@@ -24,3 +24,7 @@ pve-01                          IN      A       192.168.0.100
 k8s-test-control-plane-01       IN      A       192.168.0.200
 k8s-test-worker-01              IN      A       192.168.0.201
 k8s-test-worker-02              IN      A       192.168.0.202
+grafana                         IN      A       192.168.0.205
+uptime                          IN      A       192.168.0.205
+prometheus                      IN      A       192.168.0.205
+pihole                          IN      A       192.168.0.205
