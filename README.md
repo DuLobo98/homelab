@@ -6,17 +6,18 @@ This repository contains infrastructure and documentation for my homelab setup.
 
 |          Machine Name           |   IP Address   |               Purpose               |
 |---------------------------------|----------------|-------------------------------------|
-| pve-01                          | 192.168.0.100  | Proxmox Virtual Environment         |
-| k8s-test-control-plane-01       | 192.168.0.200  | Kubernetes Control Plane - Testing  |
-| k8s-test-worker-01              | 192.168.0.201  | Kubernetes Worker - Testing         |
-| k8s-test-worker-02              | 192.168.0.202  | Kubernetes Worker -Testing          |
+| pve-01                          | 192.168.1.100  | Proxmox Virtual Environment         |
+| k8s-prod-control-plane-01       | 192.168.1.200  | Kubernetes Control Plane - Prod     |
+| k8s-prod-worker-01              | 192.168.1.201  | Kubernetes Worker - Prod            |
+| k8s-prod-worker-02              | 192.168.1.202  | Kubernetes Worker - Prod            |
 
 ## Folder Structure
 
 ```
 homelab/
-├── README.md
-├── proxmox/                                       # Proxmox-related resources
-│   └── scripts/                                   # Scripts for managing Proxmox
-│       └── create-ubuntu-noble-cloudinit.sh       # Script to create Ubuntu 24.04 cloud-init templates
+├── bastion/                                       # Bastion host configuration
+├── infrastructure/                                # Infrastructure as Code
+│   └── proxmox/                                   # Proxmox Terraform configuration
+├── kubernetes/                                    # Kubernetes manifests and configs
+└── scripts/                                       # Utility scripts
 ```
