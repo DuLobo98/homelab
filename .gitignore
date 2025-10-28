@@ -18,3 +18,6 @@ override.tf.json
 
 #devbox
 .devbox/
+
+# Kustomize
+.charts/

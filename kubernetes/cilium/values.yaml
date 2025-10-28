@@ -1,0 +1,20 @@
+# kubeProxyReplacement: true
+
+# l2announcements:
+#   enabled: true
+
+# externalIPs:
+#   enabled: true
+
+# nodePort:
+#   enabled: true
+
+# ipam:
+#   mode: "kubernetes"
+
+# hubble:
+#   enabled: true
+#   relay:
+#     enabled: true
+#   ui:
+#     enabled: true

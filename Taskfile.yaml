@@ -1,0 +1,132 @@
+version: '3'
+
+vars:
+  CILIUM_NAMESPACE: "kube-system"
+  ARGOCD_NAMESPACE: "argocd"
+
+silent: true
+
+tasks:
+  default:
+    desc: "Show available tasks"
+    
+    cmds:
+      - task --list
+
+  cilium:install:
+    desc: "Install Cilium"
+    cmds:
+      - |
+        echo "Installing Cilium"
+        kubectl kustomize ./kubernetes/cilium --enable-helm | kubectl apply -f -
+      - echo "Cilium installed successfully"
+
+  cilium:verify:
+    desc: "Verify Cilium installation"
+    cmds:
+      - |
+        echo "Verifying Cilium installation..."
+        kubectl wait --for=condition=ready pod -l k8s-app=cilium -n {{.CILIUM_NAMESPACE}} --timeout=300s
+        kubectl -n {{.CILIUM_NAMESPACE}} get pods -l k8s-app=cilium
+      - cilium status --wait
+      - echo "Cilium is running"
+
+  cilium:apply:
+    desc: "Apply Cilium IP pools and L2 announcement policies"
+    deps: [cilium:verify]
+    cmds:
+      - |
+        echo "Applying Cilium configuration..."
+        kubectl apply -f ./kubernetes/cilium/cilium-config/
+      - echo "Cilium configuration applied"
+
+  cilium:clean:
+    desc: "Uninstall Cilium (WARNING: This will break cluster networking!)"
+    prompt: "This will remove Cilium. Continue?"
+    cmds:
+      - |
+        echo "Removing Cilium resources..."
+        kubectl kustomize ./kubernetes/cilium --enable-helm | kubectl delete -f - --ignore-not-found=true
+      - echo "Cilium removed"
+
+  cilium:ui:
+    desc: "Port-forward to Cilium Hubble UI"
+    deps: [cilium:verify]
+    cmds:
+      - |
+        echo "Access Hubble UI at: http://localhost:12000"
+        echo "Requires Hubble and Hubble UI to be enabled in values.yaml"
+        kubectl port-forward svc/hubble-ui -n {{.CILIUM_NAMESPACE}} 12000:80
+
+  argocd:install:
+    desc: "Install ArgoCD"
+    deps: [cilium:verify]
+    cmds:
+      - |
+        echo "Installing ArgoCD"
+        kubectl kustomize ./kubernetes/argocd --enable-helm | kubectl apply -f -
+      - echo "ArgoCD installed successfully"
+
+  argocd:verify:
+    desc: "Verify ArgoCD installation"
+    cmds:
+      - |
+        echo "Verifying ArgoCD installation..."
+        kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=argocd-server -n {{.ARGOCD_NAMESPACE}} --timeout=300s
+        kubectl -n {{.ARGOCD_NAMESPACE}} get pods
+
+  argocd:apply:
+    desc: "Apply ArgoCD applications (App of Apps pattern)"
+    deps: [argocd:verify]
+    cmds:
+      - |
+        echo "Applying ArgoCD applications..."
+        kubectl apply -f ./argocd-apps
+      - echo "ArgoCD applications deployed"
+      - echo "Check status with kubectl get applications -n {{.ARGOCD_NAMESPACE}}"
+
+  argocd:ui:
+    desc: "Port-forward to ArgoCD UI"
+    cmds:
+      - |
+        echo "Access ArgoCD at: https://localhost:8080"
+        echo "Username: admin"
+        echo "Password: (run 'task argocd:password' to get password)"
+        kubectl port-forward svc/argocd-server -n {{.ARGOCD_NAMESPACE}} 8080:443
+
+  argocd:password:
+    desc: "Get ArgoCD admin password"
+    cmds:
+      - |
+        echo "ArgoCD Admin Password:"
+        kubectl -n {{.ARGOCD_NAMESPACE}} get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+  
+  argocd:clean:
+    desc: "Uninstall ArgoCD"
+    prompt: "This will remove ArgoCD. Continue?"
+    cmds:
+      - |
+        echo "Removing ArgoCD resources..."
+        kubectl kustomize ./kubernetes/argocd --enable-helm | kubectl delete -f - --ignore-not-found=true
+      - echo "ArgoCD removed"
+
+  bootstrap:
+    desc: "Complete bootstrap: Cilium → ArgoCD → Apps"
+    cmds:
+      - task: cilium:install
+      - task: cilium:verify
+      - task: cilium:apply
+      - task: argocd:install
+      - task: argocd:verify
+      - task: argocd:apply
+      - |
+        echo "=========================================="
+        echo "Bootstrap complete!"
+        echo "=========================================="
+
+  clean:
+    desc: "Clean ArgoCD and Cilium"
+    prompt: "This will remove all bootstrap components. Continue?"
+    cmds:
+      - task: argocd:clean
+      - task: cilium:clean
