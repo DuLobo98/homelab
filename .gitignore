@@ -9,12 +9,11 @@ terraform.tfvars
 terraform.tfvars.json
 *.auto.tfvars
 *.auto.tfvars.json
+*.tfvars
+!*.tfvars.tpl
 crash.log
 crash.*.log
 override.tf
 override.tf.json
 *_override.tf
 *_override.tf.json
-
-#devbox
-.devbox/

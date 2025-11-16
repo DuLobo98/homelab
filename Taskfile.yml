@@ -1,0 +1,26 @@
+version: "3"
+
+tasks:
+  terraform:generate-tfvars:
+    desc: Generate all Terraform tfvars files using 1Password secret injection.
+    silent: true
+    vars:
+      TEMPLATE_DIR: infrastructure
+    preconditions:
+      - sh: command -v op >/dev/null 2>&1
+        msg: "1Password CLI (op) is required to inject secrets"
+    cmds:
+      - |
+        set -euo pipefail
+        templates=$(find "{{.TEMPLATE_DIR}}" -name '*.tfvars.tpl')
+        if [ -z "$templates" ]; then
+          echo "No tfvars templates found under {{.TEMPLATE_DIR}}" >&2
+          exit 0
+        fi
+        for template in $templates; do
+          output="${template%.tpl}"
+          op inject -i "$template" -o "$output" -f
+          echo "Injected $template → $output"
+        done
+
+

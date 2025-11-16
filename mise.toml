@@ -2,4 +2,5 @@
 helm = "latest"
 kubectl = "latest"
 talosctl = "latest"
+task = "latest"
 terraform = "latest"
