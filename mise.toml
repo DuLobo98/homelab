@@ -1,0 +1,5 @@
+[tools]
+helm = "latest"
+kubectl = "latest"
+talosctl = "latest"
+terraform = "latest"
