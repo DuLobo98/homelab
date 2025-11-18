@@ -20,3 +20,32 @@ tasks:
           op inject -i "$template" -o "$output" -f
           echo "Injected $template → $output"
         done
+
+  k3s:bootstrap:
+    desc: Bootstrap k3s cluster with 1 control plane and 2 workers
+    silent: true
+    cmds:
+      - |
+        set -euo pipefail
+        
+        CONTROL_PLANE_IP="192.168.1.200"
+        WORKER_01_IP="192.168.1.201"
+        WORKER_02_IP="192.168.1.202"
+        SSH_USER="ltwadmin"
+
+        echo "Installing k3s on control plane (${CONTROL_PLANE_IP})..."
+        ssh.exe ${SSH_USER}@${CONTROL_PLANE_IP} "curl -sfL https://get.k3s.io | sh -"
+        
+        echo "Retrieving node token..."
+        K3S_TOKEN=$(ssh.exe ${SSH_USER}@${CONTROL_PLANE_IP} "sudo cat /var/lib/rancher/k3s/server/node-token")
+        
+        echo "Joining worker 01 (${WORKER_01_IP}) to cluster..."
+        ssh.exe ${SSH_USER}@${WORKER_01_IP} "curl -sfL https://get.k3s.io | K3S_URL=https://${CONTROL_PLANE_IP}:6443 K3S_TOKEN=${K3S_TOKEN} sh -"
+        
+        echo "Joining worker 02 (${WORKER_02_IP}) to cluster..."
+        ssh.exe ${SSH_USER}@${WORKER_02_IP} "curl -sfL https://get.k3s.io | K3S_URL=https://${CONTROL_PLANE_IP}:6443 K3S_TOKEN=${K3S_TOKEN} sh -"
+        
+        echo "Copying kubeconfig..."
+        ssh.exe ${SSH_USER}@${CONTROL_PLANE_IP} "sudo cat /etc/rancher/k3s/k3s.yaml" | sed "s/127.0.0.1/${CONTROL_PLANE_IP}/g" > ~/.kube/config
+        
+        echo "k3s cluster bootstrapped successfully!"
