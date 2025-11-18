@@ -7,6 +7,8 @@
 .terraform.lock.hcl
 terraform.tfvars
 terraform.tfvars.json
+*.tfvars
+!*.tfvars.tpl
 *.auto.tfvars
 *.auto.tfvars.json
 crash.log
