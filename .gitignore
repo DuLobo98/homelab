@@ -7,6 +7,8 @@
 .terraform.lock.hcl
 terraform.tfvars
 terraform.tfvars.json
+*.tfvars
+!*.tfvars.tpl
 *.auto.tfvars
 *.auto.tfvars.json
 crash.log
@@ -15,6 +17,3 @@ override.tf
 override.tf.json
 *_override.tf
 *_override.tf.json
-
-#devbox
-.devbox/
