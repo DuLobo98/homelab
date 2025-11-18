@@ -46,6 +46,7 @@ tasks:
         ssh.exe ${SSH_USER}@${WORKER_02_IP} "curl -sfL https://get.k3s.io | K3S_URL=https://${CONTROL_PLANE_IP}:6443 K3S_TOKEN=${K3S_TOKEN} sh -"
         
         echo "Copying kubeconfig..."
-        ssh.exe ${SSH_USER}@${CONTROL_PLANE_IP} "sudo cat /etc/rancher/k3s/k3s.yaml" | sed "s/127.0.0.1/${CONTROL_PLANE_IP}/g" > ~/.kube/config
+        ssh.exe ${SSH_USER}@${CONTROL_PLANE_IP} "sudo cat /etc/rancher/k3s/k3s.yaml" | sed "s/127.0.0.1/${CONTROL_PLANE_IP}/g" > ~/.kube/config-k3s
+        export KUBECONFIG=~/.kube/config-k3s
         
         echo "k3s cluster bootstrapped successfully!"
