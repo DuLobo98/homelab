@@ -1,0 +1,5 @@
+[tools]
+kubectl = "latest"
+task = "latest"
+terraform = "latest"
+helm = "latest"
