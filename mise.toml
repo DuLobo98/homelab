@@ -1,5 +1,7 @@
 [tools]
-kubectl = "latest"
-task = "latest"
-terraform = "latest"
-helm = "latest"
+kubectl = "1.34"
+task = "3.45"
+terraform = "1.14"
+helm = "3.19"
+kustomize = "5.8"
+jq = "1.8"
