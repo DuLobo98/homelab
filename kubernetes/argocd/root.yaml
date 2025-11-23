@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: git@github.com:DuLobo98/homelab.git
     path: /kubernetes
-    targetRevision: feature/ltw-add-argocd # TODO: change to main
+    targetRevision: feature/ltw-14-add-argocd # TODO: change to main
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
