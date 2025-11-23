@@ -8,6 +8,7 @@ metadata:
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
+  project: default
   source:
     repoURL: git@github.com:DuLobo98/homelab.git
     targetRevision: feature/ltw-14-add-argocd # TODO: change to main
