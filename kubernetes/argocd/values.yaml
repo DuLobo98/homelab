@@ -52,3 +52,7 @@ notifications:
   enabled: true
   secret:
     create: true
+
+configs:
+  cm:
+    kustomize.buildOptions: "--enable-helm"
