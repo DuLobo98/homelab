@@ -20,5 +20,4 @@ override.tf.json
 
 
 # Kubernetes
-github-secret.yaml
 charts/

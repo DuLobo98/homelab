@@ -8,7 +8,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: git@github.com:DuLobo98/homelab.git
+    repoURL: https://github.com/DuLobo98/homelab.git
     path: kubernetes/argocd/apps
     targetRevision: main
   destination:

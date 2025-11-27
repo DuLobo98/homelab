@@ -5,7 +5,6 @@ resources:
   - namespace.yaml
   - ingress.yaml
   - root.yaml
-  - github-secret.yaml
 helmCharts:
   - name: argo-cd
     repo: https://argoproj.github.io/argo-helm
