@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: root
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/DuLobo98/homelab.git
+    path: kubernetes/argocd/apps
+    targetRevision: main
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true # Remove resources that are no longer defined in Git
+      selfHeal: true # Automatically apply changes made to resources outside of Git
+    syncOptions:
+    #- CreateNamespace=true # Create the destination namespace if it doesn't exist
+    - RespectIgnoreDifferences=true # Respect ignoreDifferences settings
+    - ApplyOutOfSyncOnly=true # Only apply changes to resources that are out of sync
+  # ignoreDifferences:
+  # - group: argoproj.io
+  #   kind: Application
+  #   jsonPointers:
+  #   - /status
+  #   - /operation

@@ -1,6 +1,12 @@
 version: "3"
 
 tasks:
+  default:
+    desc: List all available tasks
+    silent: true
+    cmds:
+      - task --list
+
   op:generate:
     desc: Generate all 1Password templates.
     silent: true
@@ -50,3 +56,36 @@ tasks:
         export KUBECONFIG=~/.kube/config-k3s
         
         echo "k3s cluster bootstrapped successfully!"
+
+  k8s:bootstrap:
+    desc: Bootstrap Kubernetes cluster.
+    silent: true
+    cmds:
+      - |
+        set -euo pipefail
+
+        echo "Bootstrapping ArgoCD..."
+        kustomize build kubernetes/argocd --enable-helm | kubectl apply -f -
+        echo "Waiting for ArgoCD to be ready..."
+        kubectl wait --for=condition=available deployment/argocd-server -n argocd --timeout=120s
+        echo "Waiting for ArgoCD initial admin secret..."
+        kubectl wait --for=create secret/argocd-initial-admin-secret -n argocd --timeout=120s
+        echo "ArgoCD bootstrapped successfully!"
+        echo "The password for the 'admin' user is:"
+        kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+
+  k8s:teardown:
+    desc: Teardown Kubernetes cluster.
+    silent: true
+    cmds:
+      - |
+        set -euo pipefail
+        
+        echo "Teardown ArgoCD..."
+        # Remove finalizers from Applications to prevent namespace from getting stuck
+        kubectl get applications -n argocd -o json | jq -r '.items[].metadata.name' | while read app; do
+          kubectl patch application "$app" -n argocd -p '{"metadata":{"finalizers":null}}' --type=merge
+        done
+        # Delete all resources using kustomize
+        kustomize build kubernetes/argocd --enable-helm | kubectl delete -f -
+        echo "ArgoCD teardown completed!"
