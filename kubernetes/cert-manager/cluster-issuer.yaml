@@ -1,6 +1,18 @@
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
-  name: selfsigned-issuer
+  name: cloudflare-cluster-issuer
 spec:
-  selfSigned: {}
+  acme:
+    server: https://acme-staging-v02.api.letsencrypt.org/directory #staging
+    # server: https://acme-v02.api.letsencrypt.org/directory #production
+    email: admin@lobotechworks.pt
+    privateKeySecretRef:
+      name: letsencrypt-cloudflare-key
+    solvers:
+      - dns01:
+          cloudflare:
+            apiTokenSecretRef:
+              namespace: cert-manager
+              name: cloudflare-api-token
+              key: api-token

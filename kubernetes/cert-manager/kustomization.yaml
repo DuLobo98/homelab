@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: cert-manager
 resources:
   - namespace.yaml
+  - cf-external-secret.yaml
   - cluster-issuer.yaml
 helmCharts:
   - name: cert-manager
