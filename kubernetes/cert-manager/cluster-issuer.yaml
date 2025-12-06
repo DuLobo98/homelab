@@ -4,8 +4,8 @@ metadata:
   name: cloudflare-cluster-issuer
 spec:
   acme:
-    server: https://acme-staging-v02.api.letsencrypt.org/directory #staging
-    # server: https://acme-v02.api.letsencrypt.org/directory #production
+    #server: https://acme-staging-v02.api.letsencrypt.org/directory #staging
+    server: https://acme-v02.api.letsencrypt.org/directory #production
     email: admin@lobotechworks.pt
     privateKeySecretRef:
       name: letsencrypt-cloudflare-key

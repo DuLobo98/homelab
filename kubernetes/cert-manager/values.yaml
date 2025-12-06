@@ -1,3 +1,7 @@
+# Add leader election namespace to prevent RBAC permissions errors
+global:
+  leaderElection:
+    namespace: cert-manager
 crds:
   enabled: true
   keep: true
