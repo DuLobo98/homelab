@@ -19,12 +19,6 @@ spec:
       prune: true # Remove resources that are no longer defined in Git
       selfHeal: true # Automatically apply changes made to resources outside of Git
     syncOptions:
-    #- CreateNamespace=true # Create the destination namespace if it doesn't exist
     - RespectIgnoreDifferences=true # Respect ignoreDifferences settings
     - ApplyOutOfSyncOnly=true # Only apply changes to resources that are out of sync
-  # ignoreDifferences:
-  # - group: argoproj.io
-  #   kind: Application
-  #   jsonPointers:
-  #   - /status
-  #   - /operation
+    - ServerSideApply=true # Use server-side apply for resource updates
