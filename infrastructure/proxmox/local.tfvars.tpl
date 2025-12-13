@@ -1,6 +1,6 @@
-proxmox_endpoint  = "op://Homelab/terraform/proxmox_endpoint"
-proxmox_api_token = "op://Homelab/terraform/proxmox_token"
+proxmox_endpoint  = "op://homelab/proxmox/proxmox_endpoint"
+proxmox_api_token = "op://homelab/proxmox/proxmox_token"
 proxmox_ssh_private_key = <<EOT
-op://Homelab/Proxmox SSH Key/private key
+op://homelab/proxmox_ssh_key/private key
 EOT
-ssh_public_key = "op://Homelab/Proxmox SSH Key/public key"
+ssh_public_key = "op://homelab/proxmox_ssh_key/public key"
