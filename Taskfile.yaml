@@ -55,6 +55,9 @@ tasks:
         ssh.exe ${SSH_USER}@${CONTROL_PLANE_IP} "sudo cat /etc/rancher/k3s/k3s.yaml" | sed "s/127.0.0.1/${CONTROL_PLANE_IP}/g" > ~/.kube/config-k3s
         export KUBECONFIG=~/.kube/config-k3s
         
+        echo "Removing default storage class to prevent conflicts with Longhorn..."
+        kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+        
         echo "k3s cluster bootstrapped successfully!"
 
   k8s:bootstrap:
