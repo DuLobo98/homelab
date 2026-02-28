@@ -86,10 +86,11 @@ ArgoCD will automatically sync all applications from the `kubernetes/argocd/apps
 
 Applications are deployed in order using `argocd.argoproj.io/sync-wave` annotations to ensure dependencies are ready before dependent applications are deployed:
 
-| Wave  | Applications             | Purpose                                                                     |
-|-------|--------------------------|-----------------------------------------------------------------------------|
-| **0** | ArgoCD, external-secrets | Core infrastructure that other apps depend on                               |
-| **1** | cert-manager             | Is dependent on external-secrets                                            |
+| Wave  | Applications                   | Purpose                                                                      |
+|-------|--------------------------------|------------------------------------------------------------------------------|
+| **0** | ArgoCD, external-secrets       | Core infrastructure that other apps depend on                                |
+| **1** | cert-manager                   | Is dependent on external-secrets                                             |
+| **2** | longhorn                       | Depends on cert-manager                                                      |
 
 ### Kubernetes Applications
 
@@ -97,11 +98,12 @@ All applications are deployed using ArgoCD's app of apps pattern, where a root a
 
 #### Core Services
 
-| Application      | Namespace        | URL                                    | Description                          |
-|------------------|------------------|----------------------------------------|--------------------------------------|
-| ArgoCD           | argocd           | https://argocd.home.lobotechworks.pt   | GitOps CD for Kubernetes             |
-| cert-manager     | cert-manager     | -                                      | Automated TLS certificate management |
-| external-secrets | external-secrets | -                                      | Sync secrets from 1Password          |
+| Application      | Namespace        | URL                                    | Description                               |
+|------------------|------------------|----------------------------------------|-------------------------------------------|
+| ArgoCD           | argocd           | https://argocd.home.lobotechworks.pt   | GitOps CD for Kubernetes                  |
+| cert-manager     | cert-manager     | -                                      | Automated TLS certificate management      |
+| external-secrets | external-secrets | -                                      | Sync secrets from 1Password               |
+| longhorn         | longhorn-system  | https://longhorn.home.lobotechworks.pt | Cloud native block storage for Kubernetes |
 
 #### Applications
 
