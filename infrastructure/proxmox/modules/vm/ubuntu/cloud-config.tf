@@ -19,9 +19,18 @@ users:
 package_update: true
 packages:
   - qemu-guest-agent
+  - open-iscsi
+  - nfs-common
+  - cryptsetup
+  - dmsetup
+  - util-linux
 runcmd:
   - systemctl enable qemu-guest-agent
   - systemctl start qemu-guest-agent
+  - modprobe iscsi_tcp
+  - systemctl enable iscsid
+  - systemctl start iscsid
+  # multipathd may need to be disabled if starting to show problems with longhorn https://longhorn.io/kb/troubleshooting-volume-with-multipath/
   - echo "done" > /tmp/cloud-config.done
 EOF
 

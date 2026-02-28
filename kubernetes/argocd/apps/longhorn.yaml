@@ -11,7 +11,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/DuLobo98/homelab.git
-    targetRevision: feature/ltw-45-add-storage-solution
+    targetRevision: main
     path: kubernetes/longhorn
   destination:
     server: https://kubernetes.default.svc
