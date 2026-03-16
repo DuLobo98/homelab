@@ -1,0 +1,21 @@
+ingress:
+  enabled: true
+  ingressClassName: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: cloudflare-cluster-issuer
+    traefik.ingress.kubernetes.io/router.tls: "true"
+  hosts:
+    - "grafana.home.lobotechworks.pt"
+  tls:
+    - hosts:
+        - grafana.home.lobotechworks.pt
+      secretName: grafana-tls
+
+persistence:
+  enabled: true
+  storageClass: longhorn
+  
+admin:
+  existingSecret: grafana-admin-credentials
+  userKey: grafana-user
+  passwordKey: grafana-password
