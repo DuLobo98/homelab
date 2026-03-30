@@ -115,3 +115,17 @@ tasks:
         # Delete all resources using kustomize
         kustomize build kubernetes/argocd --enable-helm | kubectl delete -f -
         echo "ArgoCD teardown completed!"
+
+  hosts:add:*:*:
+    desc: Add url entry to /etc/hosts for control plane. Use hosts:add:[APPNAME]:[DOMAIN]
+    silent: true
+    vars:
+      APPNAME: "{{ index .MATCH 0}}"
+      DOMAIN: "{{ index .MATCH 1}}"
+    cmds:
+      - |
+        set -euo pipefail
+
+        echo "Adding host entry to /etc/hosts..."
+        sudo sh -c 'echo "192.168.1.200 {{.DOMAIN}} {{.APPNAME}}" >> /etc/hosts'
+        echo "Host entry added to /etc/hosts."
