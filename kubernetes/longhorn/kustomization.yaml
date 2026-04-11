@@ -4,6 +4,8 @@ namespace: longhorn-system
 resources:
   - namespace.yaml
   - ingress.yaml
+  - backup.yaml
+  - critical-storageclass.yaml
 helmCharts:
   - name: longhorn
     repo: https://charts.longhorn.io/
@@ -12,4 +14,5 @@ helmCharts:
     namespace: longhorn-system
     valuesFile: values.yaml
     includeCRDs: true
-  
+patches:
+  - path: default-storageclass.yaml

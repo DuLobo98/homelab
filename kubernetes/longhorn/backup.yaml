@@ -1,0 +1,236 @@
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: backup-daily
+  namespace: longhorn-system
+spec:
+  concurrency: 1
+  cron: 0 1 * * *
+  groups:
+    - daily
+    - default
+  labels:
+    backup: full
+    critical: "false"
+    schedule: daily
+  name: backup-daily
+  parameters:
+    full-backup-interval: "7"
+  retain: 14
+  task: backup
+---
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: backup-daily-critical
+  namespace: longhorn-system
+spec:
+  concurrency: 1
+  cron: 0 0 * * *
+  groups:
+    - critical
+  labels:
+    backup: full
+    critical: "true"
+    schedule: daily
+  name: backup-daily-critical
+  parameters:
+    full-backup-interval: "1"
+  retain: 14
+  task: backup-force-create
+---
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: backup-monthly
+  namespace: longhorn-system
+spec:
+  concurrency: 1
+  cron: 0 3 1 * *
+  groups:
+    - monthly
+  labels:
+    backup: full
+    critical: "false"
+    schedule: monthly
+  name: backup-monthly
+  parameters:
+    full-backup-interval: "3"
+  retain: 12
+  task: backup
+---
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: backup-monthly-critical
+  namespace: longhorn-system
+spec:
+  concurrency: 1
+  cron: 0 4 1 * *
+  groups:
+    - critical
+  labels:
+    backup: full
+    critical: "true"
+    schedule: monthly
+  name: backup-monthly-critical
+  parameters:
+    full-backup-interval: "1"
+  retain: 12
+  task: backup-force-create
+---
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: backup-weekly
+  namespace: longhorn-system
+spec:
+  concurrency: 1
+  cron: 0 2 * * 0
+  groups:
+    - weekly
+  labels:
+    backup: full
+    critical: "false"
+    schedule: weekly
+  name: backup-weekly
+  parameters:
+    full-backup-interval: "4"
+  retain: 52
+  task: backup
+---
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: backup-weekly-critical
+  namespace: longhorn-system
+spec:
+  concurrency: 1
+  cron: 0 2 * * 0
+  groups:
+    - critical
+  labels:
+    backup: full
+    critical: "true"
+    schedule: weekly
+  name: backup-weekly-critical
+  parameters:
+    full-backup-interval: "1"
+  retain: 52
+  task: backup-force-create
+---
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: snapshot-cleanup
+  namespace: longhorn-system
+spec:
+  concurrency: 1
+  cron: 0 5 * * *
+  groups:
+    - daily
+    - default
+  labels:
+    backup: cleanup
+    critical: "false"
+    schedule: daily
+  name: snapshot-cleanup
+  parameters: {}
+  retain: 0
+  task: snapshot-cleanup
+---
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: snapshot-cleanup-critical
+  namespace: longhorn-system
+spec:
+  concurrency: 1
+  cron: 0 */2 * * *
+  groups:
+    - critical
+  labels:
+    backup: cleanup
+    critical: "true"
+    schedule: 2h
+  name: snapshot-cleanup-critical
+  parameters: {}
+  retain: 0
+  task: snapshot-cleanup
+---
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: snapshot-daily
+  namespace: longhorn-system
+spec:
+  concurrency: 1
+  cron: 0 12 * * *
+  groups:
+    - daily
+  labels:
+    backup: snapshot
+    critical: "false"
+    schedule: daily
+  name: snapshot-daily
+  parameters: {}
+  retain: 14
+  task: snapshot
+---
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: snapshot-delete
+  namespace: longhorn-system
+spec:
+  concurrency: 1
+  cron: 30 4 * * *
+  groups:
+    - daily
+    - default
+  labels:
+    backup: delete
+    critical: "false"
+    schedule: daily
+  name: snapshot-delete
+  parameters: {}
+  retain: 14
+  task: snapshot-delete
+---
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: snapshot-delete-critical
+  namespace: longhorn-system
+spec:
+  concurrency: 1
+  cron: 30 * * * *
+  groups:
+    - critical
+  labels:
+    backup: delete
+    critical: "true"
+    schedule: hourly
+  name: snapshot-delete-critical
+  parameters: {}
+  retain: 48
+  task: snapshot-delete
+---
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: snapshot-hourly
+  namespace: longhorn-system
+spec:
+  concurrency: 1
+  cron: 0 * * * *
+  groups:
+    - critical
+  labels:
+    backup: snapshot
+    critical: "true"
+    schedule: hourly
+  name: snapshot-hourly
+  parameters: {}
+  retain: 48
+  task: snapshot-force-create

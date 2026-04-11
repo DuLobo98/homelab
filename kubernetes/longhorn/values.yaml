@@ -1,5 +1,19 @@
-preUpgradeChecker:
-  jobEnabled: false
+defaultSettings:
+  defaultDataPath: /data/longhorn
+  defaultReplicaCount: 2
+  replicaSoftAntiAffinity: true
+  nodeDownPodDeletionPolicy: "do-nothing"
+  allowRecurringJobWhileVolumeDetached: true
+  createDefaultDiskLabeledNodes: true
+  defaultLonghornStaticStorageClass: "longhorn"
+  allowCollectingLonghornUsageMetrics: false
+  storageMinimalAvailablePercentage: 10
+
+defaultBackupStore:
+  backupTarget: nfs://192.168.1.105:/volume1/homelab/longhorn
 
 ingress:
   enabled: false
+
+preUpgradeChecker:
+  jobEnabled: false
