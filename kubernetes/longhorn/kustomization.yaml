@@ -6,6 +6,7 @@ resources:
   - ingress.yaml
   - backup.yaml
   - critical-storageclass.yaml
+  - rustfs-external-secret.yaml
 helmCharts:
   - name: longhorn
     repo: https://charts.longhorn.io/

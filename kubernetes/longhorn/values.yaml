@@ -10,7 +10,8 @@ defaultSettings:
   storageMinimalAvailablePercentage: 10
 
 defaultBackupStore:
-  backupTarget: nfs://192.168.1.105:/volume1/homelab/longhorn
+  backupTarget: s3://backups-longhorn@us-east-1/
+  backupTargetCredentialSecret: rustfs-credentials
 
 ingress:
   enabled: false
