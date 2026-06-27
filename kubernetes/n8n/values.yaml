@@ -1,0 +1,17 @@
+timezone: "Europe/Lisbon"
+
+db:
+  type: sqlite
+
+existingEncryptionKeySecret: "n8n-credentials"
+
+main:
+  extraEnvVars:
+    N8N_BASIC_AUTH_ACTIVE: "true"
+  extraSecretNamesForEnvFrom:
+    - n8n-credentials
+  persistence:
+    enabled: true
+    storageClass: longhorn
+    size: 5Gi
+    accessMode: ReadWriteOnce

@@ -107,6 +107,7 @@ All applications are deployed using ArgoCD's app of apps pattern, where a root a
 
 | Application      | Namespace        | URL                                    | Description                          |
 |------------------|------------------|----------------------------------------|--------------------------------------|
+| n8n              | n8n              | https://n8n.home.lobotechworks.pt      | Workflow automation                  |
 
 ## Machine IPs
 
