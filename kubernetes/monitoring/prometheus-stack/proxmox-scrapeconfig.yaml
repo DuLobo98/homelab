@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: proxmox-node-exporter
+  namespace: prometheus-stack
+  labels:
+    prometheus: kube-prometheus-stack
+spec:
+  staticConfigs:
+    - targets:
+        - 192.168.1.100:9100
+      labels:
+        instance: pve-01
+        job: proxmox-node-exporter

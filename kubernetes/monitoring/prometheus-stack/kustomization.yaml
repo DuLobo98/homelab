@@ -7,6 +7,7 @@ resources:
   - prometheus_ingress.yaml
   - alertmanager_ingress.yaml
   - grafana-external-secret.yaml
+  - proxmox-scrapeconfig.yaml
 helmCharts:
   - name: kube-prometheus-stack
     repo: https://prometheus-community.github.io/helm-charts
