@@ -12,6 +12,22 @@ prometheus:
             requests:
               storage: 20Gi
     scrapeInterval: 30s
+    serviceMonitorSelectorNilUsesHelmValues: false
+    serviceMonitorSelector:
+      matchLabels: &prometheusInstance
+        prometheus: kube-prometheus-stack
+    ruleSelectorNilUsesHelmValues: false
+    ruleSelector:
+      matchLabels: *prometheusInstance
+    podMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelector:
+      matchLabels: *prometheusInstance
+    probeSelectorNilUsesHelmValues: false
+    probeSelector:
+      matchLabels: *prometheusInstance
+    scrapeConfigSelectorNilUsesHelmValues: false
+    scrapeConfigSelector:
+      matchLabels: *prometheusInstance
 
 alertmanager:
   alertmanagerSpec:
@@ -39,4 +55,18 @@ grafana:
     passwordKey: admin-password
   ingress:
     enabled: false
+  serviceMonitor:
+    labels: *prometheusInstance
+
+commonLabels: *prometheusInstance
+
+kube-state-metrics:
+  prometheus:
+    monitor:
+      additionalLabels: *prometheusInstance
+
+prometheus-node-exporter:
+  prometheus:
+    monitor:
+      additionalLabels: *prometheusInstance
 
