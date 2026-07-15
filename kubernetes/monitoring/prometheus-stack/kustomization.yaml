@@ -15,3 +15,11 @@ helmCharts:
     namespace: prometheus-stack
     valuesFile: values.yaml
     includeCRDs: true
+configMapGenerator:
+  - name: longhorn-grafana-dashboards
+    files:
+      - dashboards/generated/longhorn/longhorn.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"
