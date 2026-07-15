@@ -129,3 +129,39 @@ tasks:
         echo "Adding host entry to /etc/hosts..."
         sudo sh -c 'echo "192.168.1.200 {{.DOMAIN}} {{.APPNAME}}" >> /etc/hosts'
         echo "Host entry added to /etc/hosts."
+
+  monitoring:dashboards:add:*:*:
+    desc: Download a new Grafana dashboard from grafana.com. Use monitoring:dashboards:add:[APP]:[GNET_ID]
+    silent: true
+    vars:
+      APP: "{{ index .MATCH 0 }}"
+      GNET_ID: "{{ index .MATCH 1 }}"
+    cmds:
+      - |
+        set -euo pipefail
+
+        DEST_DIR="kubernetes/monitoring/prometheus-stack/dashboards/generated/{{.APP}}"
+        DEST_FILE="$DEST_DIR/{{.APP}}.json"
+        mkdir -p "$DEST_DIR"
+        echo "Downloading dashboard {{.GNET_ID}} from grafana.com..."
+        curl -fsS "https://grafana.com/api/dashboards/{{.GNET_ID}}/revisions/latest/download" | jq 'del(.id)' > "$DEST_FILE"
+        echo "Saved to $DEST_FILE"
+
+  monitoring:dashboards:update:
+    desc: Refresh generated Grafana dashboards under kubernetes/monitoring/prometheus-stack/dashboards/generated from grafana.com
+    silent: true
+    cmds:
+      - |
+        set -euo pipefail
+
+        DASHBOARDS_DIR="kubernetes/monitoring/prometheus-stack/dashboards/generated"
+        find "$DASHBOARDS_DIR" -name '*.json' | while read -r file; do
+          gnet_id=$(jq -r '.gnetId // empty' "$file")
+          if [ -z "$gnet_id" ]; then
+            echo "Skipping $file (no gnetId field)"
+            continue
+          fi
+          echo "Updating $file from grafana.com dashboard $gnet_id..."
+          curl -fsS "https://grafana.com/api/dashboards/$gnet_id/revisions/latest/download" | jq 'del(.id)' > "$file"
+        done
+        echo "Dashboards updated."
