@@ -23,3 +23,11 @@ configMapGenerator:
       disableNameSuffixHash: true
       labels:
         grafana_dashboard: "1"
+patches:
+  - target:
+      kind: Service
+      name: kube-prometheus-stack-(coredns|kube-etcd|kube-controller-manager|kube-scheduler|kube-proxy)
+    patch: |-
+      - op: replace
+        path: /metadata/namespace
+        value: kube-system
