@@ -30,7 +30,8 @@ runcmd:
   - modprobe iscsi_tcp
   - systemctl enable iscsid
   - systemctl start iscsid
-  # multipathd may need to be disabled if starting to show problems with longhorn https://longhorn.io/kb/troubleshooting-volume-with-multipath/
+  # multipathd is not needed and claims Longhorn devices, see https://longhorn.io/kb/troubleshooting-volume-with-multipath/
+  - systemctl disable --now multipathd.socket multipathd.service
   - echo "done" > /tmp/cloud-config.done
 EOF
 
