@@ -1,5 +1,9 @@
 timezone: "Europe/Lisbon"
 
+# Recreate avoids the RWO rollout deadlock
+strategy:
+  type: Recreate
+
 db:
   type: sqlite
 
@@ -18,7 +22,7 @@ main:
   resources:
     requests:
       memory: 384Mi
-      cpu: 100m
+      cpu: 200m
     limits:
       memory: 1024Mi
       cpu: 1000m

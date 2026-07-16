@@ -66,6 +66,9 @@ alertmanager:
               storage: 5Gi
 
 grafana:
+  # Recreate avoids the RWO rollout deadlock
+  deploymentStrategy:
+    type: Recreate
   persistence:
     enabled: true
     storageClassName: longhorn
@@ -117,7 +120,8 @@ prometheus-node-exporter:
     monitor:
       additionalLabels: *prometheusInstance
       relabelings:
-        - sourceLabels: [__meta_kubernetes_endpoint_node_name]
+        - action: replace
+          sourceLabels: [__meta_kubernetes_endpoint_node_name]
           targetLabel: instance
   resources:
     requests:
