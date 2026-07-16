@@ -1,18 +1,10 @@
-# Add leader election namespace to prevent RBAC permissions errors
-global:
-  leaderElection:
-    namespace: cert-manager
-crds:
-  enabled: true
-  keep: true
-
 resources:
   requests:
-    cpu: 10m
-    memory: 32Mi
-  limits:
     cpu: 200m
-    memory: 128Mi
+    memory: 384Mi
+  limits:
+    cpu: 1000m
+    memory: 768Mi
 affinity: &preferNonControlPlane
   nodeAffinity:
     preferredDuringSchedulingIgnoredDuringExecution:
@@ -22,22 +14,22 @@ affinity: &preferNonControlPlane
             - key: node-role.kubernetes.io/control-plane
               operator: DoesNotExist
 
+certController:
+  resources:
+    requests:
+      cpu: 20m
+      memory: 192Mi
+    limits:
+      cpu: 200m
+      memory: 384Mi
+  affinity: *preferNonControlPlane
+
 webhook:
   resources:
     requests:
       cpu: 10m
       memory: 96Mi
     limits:
-      cpu: 200m
-      memory: 256Mi
-  affinity: *preferNonControlPlane
-
-cainjector:
-  resources:
-    requests:
-      cpu: 10m
-      memory: 64Mi
-    limits:
-      cpu: 200m
+      cpu: 100m
       memory: 192Mi
   affinity: *preferNonControlPlane

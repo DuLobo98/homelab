@@ -2,6 +2,21 @@ prometheus:
   prometheusSpec:
     retention: 15d
     retentionSize: 20GiB
+    resources:
+      requests:
+        memory: 900Mi
+        cpu: 100m
+      limits:
+        memory: 1536Mi
+        cpu: 1000m
+    affinity: &preferNonControlPlane
+      nodeAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            preference:
+              matchExpressions:
+                - key: node-role.kubernetes.io/control-plane
+                  operator: DoesNotExist
     storageSpec:
       volumeClaimTemplate:
         spec:
@@ -32,6 +47,14 @@ prometheus:
 alertmanager:
   alertmanagerSpec:
     retention: 72h
+    resources:
+      requests:
+        memory: 200Mi
+        cpu: 10m
+      limits:
+        memory: 512Mi
+        cpu: 200m
+    affinity: *preferNonControlPlane
     storage:
       volumeClaimTemplate:
         spec:
@@ -57,6 +80,22 @@ grafana:
     enabled: false
   serviceMonitor:
     labels: *prometheusInstance
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 50m
+    limits:
+      memory: 512Mi
+      cpu: 500m
+  affinity: *preferNonControlPlane
+  sidecar:
+    resources:
+      requests:
+        memory: 96Mi
+        cpu: 10m
+      limits:
+        memory: 192Mi
+        cpu: 100m
 
 commonLabels: *prometheusInstance
 
@@ -64,6 +103,14 @@ kube-state-metrics:
   prometheus:
     monitor:
       additionalLabels: *prometheusInstance
+  resources:
+    requests:
+      memory: 64Mi
+      cpu: 10m
+    limits:
+      memory: 192Mi
+      cpu: 200m
+  affinity: *preferNonControlPlane
 
 prometheus-node-exporter:
   prometheus:
@@ -72,4 +119,28 @@ prometheus-node-exporter:
       relabelings:
         - sourceLabels: [__meta_kubernetes_endpoint_node_name]
           targetLabel: instance
+  resources:
+    requests:
+      memory: 32Mi
+      cpu: 10m
+    limits:
+      memory: 96Mi
+      cpu: 100m
 
+prometheusOperator:
+  resources:
+    requests:
+      memory: 64Mi
+      cpu: 10m
+    limits:
+      memory: 192Mi
+      cpu: 200m
+  affinity: *preferNonControlPlane
+  prometheusConfigReloader:
+    resources:
+      requests:
+        memory: 20Mi
+        cpu: 10m
+      limits:
+        memory: 64Mi
+        cpu: 100m

@@ -11,4 +11,5 @@ helmCharts:
     releaseName: external-secrets
     namespace: external-secrets
     includeCRDs: true
+    valuesFile: values.yaml
   

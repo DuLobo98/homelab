@@ -8,9 +8,17 @@ server:
     limits:
       cpu: 500m
       memory: 512Mi
+  affinity: &preferNonControlPlane
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          preference:
+            matchExpressions:
+              - key: node-role.kubernetes.io/control-plane
+                operator: DoesNotExist
   extraArgs:
     - --insecure # Disable TLS because we're using Ingress with TLS termination
-  
+
 applicationSet:
   enabled: true
   resources:
@@ -20,6 +28,7 @@ applicationSet:
     limits:
       cpu: 500m
       memory: 512Mi
+  affinity: *preferNonControlPlane
 
 controller:
   resources:
@@ -29,6 +38,7 @@ controller:
     limits:
       cpu: 500m
       memory: 1Gi
+  affinity: *preferNonControlPlane
 
 repoServer:
   resources:
@@ -38,6 +48,17 @@ repoServer:
     limits:
       cpu: 500m
       memory: 512Mi
+  affinity: *preferNonControlPlane
+
+redis:
+  resources:
+    requests:
+      cpu: 20m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
+  affinity: *preferNonControlPlane
 
 # External authentication
 dex:
@@ -52,6 +73,14 @@ notifications:
   enabled: true
   secret:
     create: true
+  resources:
+    requests:
+      cpu: 10m
+      memory: 96Mi
+    limits:
+      cpu: 100m
+      memory: 256Mi
+  affinity: *preferNonControlPlane
 
 configs:
   cm:

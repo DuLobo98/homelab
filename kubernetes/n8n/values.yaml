@@ -15,3 +15,18 @@ main:
     storageClass: longhorn
     size: 5Gi
     accessMode: ReadWriteOnce
+  resources:
+    requests:
+      memory: 384Mi
+      cpu: 100m
+    limits:
+      memory: 1024Mi
+      cpu: 1000m
+  affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          preference:
+            matchExpressions:
+              - key: node-role.kubernetes.io/control-plane
+                operator: DoesNotExist
