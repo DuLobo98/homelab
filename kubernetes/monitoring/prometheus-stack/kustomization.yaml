@@ -1,6 +1,9 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: prometheus-stack
+# No top-level namespace transformer because it force-overrides the namespace on
+# every resource, including the kube-prometheus-stack chart's exporter
+# Services that are deliberately hardcoded to kube-system (coredns, kube-etcd,
+# kube-controller-manager, kube-scheduler, kube-proxy)
 resources:
   - namespace.yaml
   - grafana_ingress.yaml
@@ -18,17 +21,10 @@ helmCharts:
     includeCRDs: true
 configMapGenerator:
   - name: longhorn-grafana-dashboards
+    namespace: prometheus-stack
     files:
       - dashboards/generated/longhorn/longhorn.json
     options:
       disableNameSuffixHash: true
       labels:
         grafana_dashboard: "1"
-patches:
-  - target:
-      kind: Service
-      name: kube-prometheus-stack-(coredns|kube-etcd|kube-controller-manager|kube-scheduler|kube-proxy)
-    patch: |-
-      - op: replace
-        path: /metadata/namespace
-        value: kube-system
