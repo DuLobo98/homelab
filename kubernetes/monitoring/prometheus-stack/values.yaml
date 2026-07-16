@@ -64,22 +64,12 @@ alertmanager:
           resources:
             requests:
               storage: 5Gi
-    secrets:
-      - alertmanager-discord-credentials
-  config:
-    route:
-      routes:
-        - receiver: 'null'
-          matchers:
-            - alertname = "Watchdog"
-        - receiver: 'discord'
-          matchers:
-            - severity =~ "critical|warning"
-    receivers:
-      - name: 'null'
-      - name: 'discord'
-        discord_configs:
-          - webhook_url_file: /etc/alertmanager/secrets/alertmanager-discord-credentials/webhook-url
+    # Config comes from the self-managed alertmanager-config secret (see
+    # alertmanager-discord-external-secret.yaml) instead of alertmanager.config
+    # below, because prometheus-operator v0.90.1 doesn't recognize
+    # discord_configs.webhook_url_file.
+    useExistingSecret: true
+    configSecret: alertmanager-config
 
 grafana:
   # Recreate avoids the RWO rollout deadlock
