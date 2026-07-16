@@ -44,6 +44,21 @@ prometheus:
     scrapeConfigSelector:
       matchLabels: *prometheusInstance
 
+# K3s runs the scheduler, controller-manager and kube-proxy in-process inside
+# the k3s server binary, and this cluster uses K3s's default embedded SQLite
+# datastore rather than etcd, so none of these are ever discoverable as
+# separate scrape targets. Disabling them removes both the always-empty
+# Service/ServiceMonitor and the *Down PrometheusRule alerts, which would
+# otherwise fire permanently regardless of actual cluster health.
+kubeControllerManager:
+  enabled: false
+kubeScheduler:
+  enabled: false
+kubeProxy:
+  enabled: false
+kubeEtcd:
+  enabled: false
+
 alertmanager:
   alertmanagerSpec:
     retention: 72h
