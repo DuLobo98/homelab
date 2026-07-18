@@ -5,6 +5,7 @@ resources:
   - namespace.yaml
   - ingress.yaml
   - root.yaml
+  - notifications-external-secret.yaml
 helmCharts:
   - name: argo-cd
     repo: https://argoproj.github.io/argo-helm

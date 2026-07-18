@@ -72,7 +72,19 @@ metrics:
 notifications:
   enabled: true
   secret:
-    create: true
+    create: false # managed via notifications-external-secret.yaml instead
+  notifiers:
+    service.webhook.discord: |
+      url: $discord-webhook-url
+      headers:
+        - name: Content-Type
+          value: application/json
+  subscriptions:
+    - recipients:
+        - discord
+      triggers:
+        - on-sync-failed
+        - on-health-degraded
   resources:
     requests:
       cpu: 10m
@@ -84,4 +96,5 @@ notifications:
 
 configs:
   cm:
+    url: https://argocd.home.lobotechworks.pt
     kustomize.buildOptions: "--enable-helm"
