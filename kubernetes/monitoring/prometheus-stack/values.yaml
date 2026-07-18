@@ -1,5 +1,6 @@
 prometheus:
   prometheusSpec:
+    externalUrl: https://prometheus.home.lobotechworks.pt
     retention: 15d
     retentionSize: 20GiB
     resources:
@@ -8,7 +9,7 @@ prometheus:
         cpu: 100m
       limits:
         memory: 1536Mi
-        cpu: 1000m
+        cpu: 1
     affinity: &preferNonControlPlane
       nodeAffinity:
         preferredDuringSchedulingIgnoredDuringExecution:
@@ -61,6 +62,7 @@ kubeEtcd:
 
 alertmanager:
   alertmanagerSpec:
+    externalUrl: https://alertmanager.home.lobotechworks.pt
     retention: 72h
     resources:
       requests:
@@ -87,6 +89,9 @@ alertmanager:
     configSecret: alertmanager-config
 
 grafana:
+  grafana.ini:
+    server:
+      root_url: https://grafana.home.lobotechworks.pt
   # Recreate avoids the RWO rollout deadlock
   deploymentStrategy:
     type: Recreate
@@ -119,7 +124,7 @@ grafana:
         cpu: 10m
       limits:
         memory: 192Mi
-        cpu: 100m
+        cpu: 250m
 
 commonLabels: *prometheusInstance
 
@@ -150,7 +155,7 @@ prometheus-node-exporter:
       cpu: 10m
     limits:
       memory: 96Mi
-      cpu: 100m
+      cpu: 250m
 
 prometheusOperator:
   resources:

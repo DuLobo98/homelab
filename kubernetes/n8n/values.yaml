@@ -10,6 +10,7 @@ db:
 existingEncryptionKeySecret: "n8n-credentials"
 
 main:
+  editorBaseUrl: "https://n8n.home.lobotechworks.pt"
   extraEnvVars:
     N8N_BASIC_AUTH_ACTIVE: "true"
   extraSecretNamesForEnvFrom:
@@ -25,7 +26,7 @@ main:
       cpu: 200m
     limits:
       memory: 1024Mi
-      cpu: 1000m
+      cpu: 1
   affinity:
     nodeAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
@@ -34,3 +35,6 @@ main:
             matchExpressions:
               - key: node-role.kubernetes.io/control-plane
                 operator: DoesNotExist
+
+webhook:
+  url: "https://n8n.home.lobotechworks.pt"
