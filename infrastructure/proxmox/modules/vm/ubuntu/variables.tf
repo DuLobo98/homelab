@@ -46,8 +46,25 @@ variable "cpu_cores" {
   type        = number
 }
 
+variable "os_datastore_id" {
+  description = "Proxmox datastore backing the OS disk."
+  type        = string
+  default     = "data"
+}
+
+variable "data_datastore_id" {
+  description = "Proxmox datastore backing the dedicated data disk."
+  type        = string
+  default     = "data-lvm"
+}
+
 variable "disk_size" {
   description = "Size of the primary disk in GiB."
+  type        = number
+}
+
+variable "data_disk_size" {
+  description = "Size of the dedicated data disk in GiB."
   type        = number
 }
 

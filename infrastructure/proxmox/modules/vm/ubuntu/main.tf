@@ -15,15 +15,27 @@ resource "proxmox_virtual_environment_vm" "ubuntu_vm" {
   }
 
   cpu {
-    cores = var.cpu_cores
+    cores   = var.cpu_cores
     sockets = 1
   }
 
+  # OS disk
   disk {
     interface    = "scsi0"
-    datastore_id = "data-lvm"
+    datastore_id = var.os_datastore_id
     size         = var.disk_size
     import_from  = var.cloud_image_import_id
+    discard      = "on"
+    ssd          = true
+  }
+
+  # Data disk
+  disk {
+    interface    = "scsi1"
+    datastore_id = var.data_datastore_id
+    size         = var.data_disk_size
+    discard      = "on"
+    ssd          = true
   }
 
   network_device {
