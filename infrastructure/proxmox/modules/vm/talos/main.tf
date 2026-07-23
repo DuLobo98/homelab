@@ -2,7 +2,7 @@ resource "proxmox_virtual_environment_vm" "this" {
   name            = var.name
   node_name       = var.node_name
   vm_id           = var.vm_id
-  tags            = concat(var.tags, ["cloud-init", "managed-by-terraform"])
+  tags            = concat(var.tags, ["k8s", "talos", "managed-by-terraform"])
   on_boot         = var.on_boot
   keyboard_layout = "pt"
 
@@ -15,6 +15,8 @@ resource "proxmox_virtual_environment_vm" "this" {
   }
 
   cpu {
+    # The Sidero Proxmox guide requires "host" rather than the kvm64 default.
+    type    = "host"
     cores   = var.cpu_cores
     sockets = 1
   }
@@ -24,7 +26,7 @@ resource "proxmox_virtual_environment_vm" "this" {
     interface    = "scsi0"
     datastore_id = var.os_datastore_id
     size         = var.disk_size
-    import_from  = var.cloud_image_import_id
+    import_from  = var.talos_image_import_id
     discard      = "on"
     ssd          = true
   }
@@ -49,6 +51,5 @@ resource "proxmox_virtual_environment_vm" "this" {
         gateway = var.ipv4_gateway
       }
     }
-    user_data_file_id = proxmox_virtual_environment_file.user_data_cloud_config.id
   }
 }
