@@ -1,6 +1,6 @@
 server:
   ingress:
-    enabled: false # Ingress is managed via Traefik IngressRoute
+    enabled: false 
   resources:
     requests:
       cpu: 250m
@@ -72,7 +72,7 @@ metrics:
 notifications:
   enabled: true
   secret:
-    create: false # managed via notifications-external-secret.yaml instead
+    create: false # Managed via notifications-external-secret.yaml
   notifiers:
     service.webhook.discord: |
       url: $discord-webhook-url

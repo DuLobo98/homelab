@@ -1,5 +1,5 @@
 defaultSettings:
-  defaultDataPath: /data/longhorn
+  defaultDataPath: /var/mnt/longhorn
   defaultReplicaCount: 2
   replicaSoftAntiAffinity: true
   nodeDownPodDeletionPolicy: "do-nothing"

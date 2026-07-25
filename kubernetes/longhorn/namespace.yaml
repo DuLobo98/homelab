@@ -2,3 +2,7 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: longhorn-system
+  labels:
+    # Longhorn needs this to be privileged, Talos enforces the "baseline"
+    # Pod Security Standard on all namespaces by default.
+    pod-security.kubernetes.io/enforce: privileged
