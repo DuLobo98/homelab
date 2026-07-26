@@ -1,13 +1,16 @@
 defaultSettings:
   defaultDataPath: /var/mnt/longhorn
   defaultReplicaCount: 2
-  replicaSoftAntiAffinity: true
-  nodeDownPodDeletionPolicy: "do-nothing"
+  replicaSoftAntiAffinity: false
+  replicaAutoBalance: best-effort
+  nodeDownPodDeletionPolicy: "delete-both-statefulset-and-deployment-pod"
   allowRecurringJobWhileVolumeDetached: true
-  createDefaultDiskLabeledNodes: false
+  createDefaultDiskLabeledNodes: true
   defaultLonghornStaticStorageClass: "longhorn"
+  managerUrl: https://longhorn.home.lobotechworks.pt
   allowCollectingLonghornUsageMetrics: false
-  storageMinimalAvailablePercentage: 10
+  storageMinimalAvailablePercentage: 25
+  storageReservedPercentageForDefaultDisk: 0
 
 defaultBackupStore:
   backupTarget: s3://backups-longhorn@us-east-1/

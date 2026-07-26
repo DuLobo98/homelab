@@ -49,6 +49,9 @@ resource "talos_machine_configuration_apply" "this" {
   config_patches = [
     yamlencode({
       machine = {
+        nodeLabels = {
+          "node.longhorn.io/create-default-disk" = "true"
+        }
         network = {
           interfaces = [{
             deviceSelector = { physical = true }
