@@ -63,6 +63,9 @@ resource "talos_machine_configuration_apply" "this" {
           image = data.talos_image_factory_urls.this.urls.installer
         }
         kubelet = {
+          extraArgs = {
+            "rotate-server-certificates" = "true"
+          }
           extraMounts = [{
             destination = "/var/mnt/longhorn"
             type        = "bind"
