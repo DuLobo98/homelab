@@ -1,10 +1,10 @@
 apiVersion: cilium.io/v2alpha1
 kind: CiliumL2AnnouncementPolicy
 metadata:
-  name: ingress
+  name: main
 spec:
   serviceSelector:
     matchLabels:
-      homelab.lobotechworks.pt/load-balancer: ingress
+      homelab.lobotechworks.pt/load-balancer: main
   externalIPs: false
   loadBalancerIPs: true

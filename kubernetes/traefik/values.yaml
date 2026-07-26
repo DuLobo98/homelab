@@ -57,7 +57,7 @@ service:
   annotations:
     lbipam.cilium.io/ips: 192.168.1.200
   labels:
-    homelab.lobotechworks.pt/load-balancer: ingress
+    homelab.lobotechworks.pt/load-balancer: main
   spec:
     externalTrafficPolicy: Cluster
     loadBalancerClass: io.cilium/l2-announcer
