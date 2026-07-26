@@ -8,7 +8,7 @@ tasks:
       - task --list
 
   op:generate:
-    desc: Generate all 1Password templates.
+    desc: Inject all 1Password templates (*.op.tpl → same name without .op.tpl).
     silent: true
     preconditions:
       - sh: command -v op >/dev/null 2>&1
@@ -16,108 +16,112 @@ tasks:
     cmds:
       - |
         set -euo pipefail
-        templates=$(find . -name '*.tpl')
+
+        templates=$(find . -name '*.op.tpl')
         if [ -z "$templates" ]; then
           echo "No 1Password templates found under ." >&2
           exit 0
         fi
         for template in $templates; do
-          output="${template%.tpl}"
+          output="${template%.op.tpl}"
           op inject -i "$template" -o "$output" -f
           echo "Injected $template → $output"
         done
 
-  k3s:bootstrap:
-    desc: Bootstrap k3s cluster with 1 control plane and 2 workers
+  talos:config:
+    desc: Generate .talosconfig/config from the Talos client config stored in 1Password.
     silent: true
+    preconditions:
+      - sh: command -v op >/dev/null 2>&1
+        msg: "1Password CLI (op) is required"
     cmds:
       - |
         set -euo pipefail
 
-        CONTROL_PLANE_IP="192.168.1.200"
-        WORKER_01_IP="192.168.1.201"
-        WORKER_02_IP="192.168.1.202"
-        SSH_USER="ltwadmin"
+        mkdir -p .talosconfig
+        op read "op://homelab/talosconfig-k8s-prod/notesPlain" > .talosconfig/config
+        chmod 600 .talosconfig/config
+        echo ".talosconfig/config generated."
 
-        echo "Installing k3s on control plane (${CONTROL_PLANE_IP})..."
-        ssh ${SSH_USER}@${CONTROL_PLANE_IP} "curl -sfL https://get.k3s.io | sh -"
-
-        echo "Retrieving node token..."
-        K3S_TOKEN=$(ssh ${SSH_USER}@${CONTROL_PLANE_IP} "sudo cat /var/lib/rancher/k3s/server/node-token")
-
-        echo "Joining worker 01 (${WORKER_01_IP}) to cluster..."
-        ssh ${SSH_USER}@${WORKER_01_IP} "curl -sfL https://get.k3s.io | K3S_URL=https://${CONTROL_PLANE_IP}:6443 K3S_TOKEN=${K3S_TOKEN} sh -"
-
-        echo "Joining worker 02 (${WORKER_02_IP}) to cluster..."
-        ssh ${SSH_USER}@${WORKER_02_IP} "curl -sfL https://get.k3s.io | K3S_URL=https://${CONTROL_PLANE_IP}:6443 K3S_TOKEN=${K3S_TOKEN} sh -"
-
-        echo "Copying kubeconfig..."
-        ssh ${SSH_USER}@${CONTROL_PLANE_IP} "sudo cat /etc/rancher/k3s/k3s.yaml" | sed "s/127.0.0.1/${CONTROL_PLANE_IP}/g" > ~/.kube/config-k3s
-        export KUBECONFIG=~/.kube/config-k3s
-
-        echo "Removing default storage class to prevent conflicts with Longhorn..."
-        kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
-
-        echo "k3s cluster bootstrapped successfully!"
-
-  k3s:get-kubeconfig:
-    desc: Get kubeconfig from control plane.
+  talos:kubeconfig:
+    desc: Generate kubeconfig from the cluster into .kubeconfig/config via talosctl.
     silent: true
+    preconditions:
+      - sh: command -v talosctl >/dev/null 2>&1
+        msg: "talosctl is required"
     cmds:
       - |
         set -euo pipefail
 
-        CONTROL_PLANE_IP="192.168.1.200"
-        SSH_USER="ltwadmin"
-
-        echo "Copying kubeconfig..."
-        ssh ${SSH_USER}@${CONTROL_PLANE_IP} "sudo cat /etc/rancher/k3s/k3s.yaml" | sed "s/127.0.0.1/${CONTROL_PLANE_IP}/g" > kubernetes/kubeconfig
-        echo "kubeconfig copied successfully!"
+        NODE="192.168.1.211"
+        mkdir -p .kubeconfig
+        talosctl kubeconfig .kubeconfig/config --nodes "${NODE}" --endpoints "${NODE}" --force
+        chmod 600 .kubeconfig/config
+        echo ".kubeconfig/config generated."
 
   k8s:bootstrap:
-    desc: Bootstrap Kubernetes cluster.
+    desc: Install Cilium and Argo CD after Talos is ready, then hand control to Argo CD.
     silent: true
+    preconditions:
+      - sh: command -v kubectl >/dev/null 2>&1
+        msg: "kubectl is required"
+      - sh: command -v kustomize >/dev/null 2>&1
+        msg: "kustomize is required"
+      - sh: command -v helm >/dev/null 2>&1
+        msg: "helm is required by kustomize's Helm chart generator"
+      - sh: command -v op >/dev/null 2>&1
+        msg: "1Password CLI (op) is required"
+      - sh: command -v talosctl >/dev/null 2>&1
+        msg: "talosctl is required"
     cmds:
+      - task: talos:config
+      - task: talos:kubeconfig
       - |
         set -euo pipefail
 
-        echo "Configuring 1Password token secret for External Secrets Operator..."
-        export OP_TOKEN=$(op read "op://homelab/1password/sa_token")
-        kubectl create -f kubernetes/external-secrets/namespace.yaml
+        REPO_ROOT="{{.ROOT_DIR}}"
+        export KUBECONFIG="$REPO_ROOT/.kubeconfig/config"
+        OP_TOKEN="$(op read "op://homelab/1password/sa_token")"
+
+        echo "Checking the Kubernetes API..."
+        kubectl get --raw=/readyz >/dev/null
+
+        echo "Installing Cilium..."
+        kustomize build "$REPO_ROOT/kubernetes/cilium" --enable-helm |
+          kubectl apply --server-side --field-manager=argocd-controller --force-conflicts -f -
+        kubectl rollout status daemonset/cilium --namespace kube-system --timeout=10m
+        kubectl rollout status deployment/cilium-operator --namespace kube-system --timeout=10m
+
+        echo "Configuring the 1Password token for External Secrets Operator..."
+        kubectl apply -f "$REPO_ROOT/kubernetes/external-secrets/namespace.yaml"
         kubectl create secret generic onepassword-token \
           --namespace external-secrets \
-          --from-literal=token="$OP_TOKEN"
-        echo "Configuring 1Password token secret completed."
+          --from-literal=token="$OP_TOKEN" \
+          --dry-run=client -o yaml |
+          kubectl apply --server-side --field-manager=argocd-controller --force-conflicts -f -
+        unset OP_TOKEN
 
-        echo "Bootstrapping ArgoCD..."
-        kustomize build kubernetes/argocd --enable-helm | kubectl apply -f -
-        echo "Waiting for ArgoCD to be ready..."
-        kubectl wait --for=condition=available deployment/argocd-server -n argocd --timeout=120s
-        echo "Waiting for ArgoCD initial admin secret..."
-        kubectl wait --for=create secret/argocd-initial-admin-secret -n argocd --timeout=120s
-        echo "ArgoCD bootstrapped successfully!"
-        echo "The password for the 'admin' user is:"
-        kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
-        echo "Bootstrap ArgoCD completed."
+        echo "Installing Argo CD..."
+        kubectl apply -f "$REPO_ROOT/kubernetes/argocd/namespace.yaml"
+        helm template argocd argo-cd \
+          --repo https://argoproj.github.io/argo-helm \
+          --version "9.1.3" \
+          --namespace argocd \
+          --include-crds \
+          --values "$REPO_ROOT/kubernetes/argocd/values.yaml" |
+          kubectl apply --server-side --field-manager=argocd-controller --force-conflicts -f -
+        kubectl wait --for=condition=established crd/applications.argoproj.io --timeout=2m
+        kubectl rollout status deployment/argocd-server --namespace argocd --timeout=5m
 
-  k8s:teardown:
-    desc: Teardown Kubernetes cluster.
-    silent: true
-    cmds:
-      - |
-        set -euo pipefail
+        echo "Starting the app-of-apps reconciliation..."
+        kubectl apply --server-side --field-manager=argocd-controller --force-conflicts \
+          -f "$REPO_ROOT/kubernetes/argocd/root.yaml"
+        kubectl wait --for=create secret/argocd-initial-admin-secret --namespace argocd --timeout=2m
 
-        echo "Teardown ArgoCD..."
-        # Remove finalizers from Applications to prevent namespace from getting stuck
-        kubectl get applications -n argocd -o json | jq -r '.items[].metadata.name' | while read app; do
-          kubectl patch application "$app" -n argocd -p '{"metadata":{"finalizers":null}}' --type=merge
-        done
-        # Delete all resources using kustomize
-        kustomize build kubernetes/argocd --enable-helm | kubectl delete -f -
-        echo "ArgoCD teardown completed!"
+        echo "Bootstrap complete."
 
   hosts:add:*:*:
-    desc: Add url entry to /etc/hosts for control plane. Use hosts:add:[APPNAME]:[DOMAIN]
+    desc: Add a URL entry to /etc/hosts for the ingress VIP. Use hosts:add:[APPNAME]:[DOMAIN]
     silent: true
     vars:
       APPNAME: "{{ index .MATCH 0}}"
@@ -126,7 +130,7 @@ tasks:
       - |
         set -euo pipefail
 
-        echo "Adding host entry to /etc/hosts..."
+        echo "Adding ingress host entry to /etc/hosts..."
         sudo sh -c 'echo "192.168.1.200 {{.DOMAIN}} {{.APPNAME}}" >> /etc/hosts'
         echo "Host entry added to /etc/hosts."
 

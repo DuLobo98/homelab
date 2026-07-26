@@ -6,6 +6,7 @@ variable "proxmox_endpoint" {
 variable "proxmox_api_token" {
   description = "Proxmox API Token"
   type        = string
+  sensitive   = true
 }
 
 variable "proxmox_insecure" {
@@ -23,9 +24,5 @@ variable "proxmox_ssh_username" {
 variable "proxmox_ssh_private_key" {
   description = "SSH private key for Proxmox host"
   type        = string
-}
-
-variable "ssh_public_key" {
-  description = "SSH public key to be used for VM access."
-  type        = string
+  sensitive   = true
 }

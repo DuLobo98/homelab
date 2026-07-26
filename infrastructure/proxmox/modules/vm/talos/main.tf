@@ -2,7 +2,7 @@ resource "proxmox_virtual_environment_vm" "this" {
   name            = var.name
   node_name       = var.node_name
   vm_id           = var.vm_id
-  tags            = concat(var.tags, ["k8s", "talos", "managed-by-terraform"])
+  tags            = concat(var.tags, ["k8s", "talos"])
   on_boot         = var.on_boot
   keyboard_layout = "pt"
 
@@ -15,8 +15,8 @@ resource "proxmox_virtual_environment_vm" "this" {
   }
 
   cpu {
-    # The Sidero Proxmox guide requires "host" rather than the kvm64 default.
-    type    = "host"
+    # Talos requires the x86-64-v2-AES CPU type
+    type    = "x86-64-v2-AES"
     cores   = var.cpu_cores
     sockets = 1
   }
@@ -26,7 +26,7 @@ resource "proxmox_virtual_environment_vm" "this" {
     interface    = "scsi0"
     datastore_id = var.os_datastore_id
     size         = var.disk_size
-    import_from  = var.talos_image_import_id
+    file_id      = var.talos_image_import_id
     discard      = "on"
     ssd          = true
   }

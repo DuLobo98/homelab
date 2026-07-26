@@ -2,7 +2,7 @@ resource "proxmox_virtual_environment_vm" "this" {
   name            = var.name
   node_name       = var.node_name
   vm_id           = var.vm_id
-  tags            = concat(var.tags, ["cloud-init", "managed-by-terraform"])
+  tags            = concat(var.tags, ["cloud-init"])
   on_boot         = var.on_boot
   keyboard_layout = "pt"
 
