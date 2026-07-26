@@ -61,10 +61,12 @@ prometheus:
       matchLabels: *prometheusInstance
 
 kubeControllerManager:
-  enabled: true
+  # Talos exposes this endpoint only on loopback.
+  enabled: false
 
 kubeScheduler:
-  enabled: true
+  # Talos exposes this endpoint only on loopback.
+  enabled: false
 
 # Cilium replaces kube-proxy in this cluster.
 kubeProxy:
@@ -164,7 +166,7 @@ grafana:
         cpu: 10m
       limits:
         memory: 192Mi
-        cpu: 250m
+        cpu: 500m
 
 commonLabels: *prometheusInstance
 
@@ -195,7 +197,7 @@ prometheus-node-exporter:
       cpu: 10m
     limits:
       memory: 96Mi
-      cpu: 250m
+      cpu: 500m
 
 prometheusOperator:
   resources:
