@@ -8,6 +8,11 @@ k8sServicePort: 7445
 l2announcements:
   enabled: true
 
+rollOutCiliumPods: true
+
+operator:
+  rollOutPods: true
+
 k8sClientRateLimit:
   qps: 10
   burst: 20
