@@ -7,7 +7,6 @@ defaultSettings:
   allowRecurringJobWhileVolumeDetached: true
   createDefaultDiskLabeledNodes: true
   defaultLonghornStaticStorageClass: "longhorn"
-  managerUrl: https://longhorn.home.lobotechworks.pt
   allowCollectingLonghornUsageMetrics: false
   storageMinimalAvailablePercentage: 25
   storageReservedPercentageForDefaultDisk: 0
