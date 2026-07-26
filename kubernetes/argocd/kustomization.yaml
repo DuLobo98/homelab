@@ -3,7 +3,6 @@ kind: Kustomization
 namespace: argocd
 resources:
   - namespace.yaml
-  - ingress.yaml
   - root.yaml
   - notifications-external-secret.yaml
 helmCharts:

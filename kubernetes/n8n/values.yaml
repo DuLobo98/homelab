@@ -26,7 +26,7 @@ main:
       cpu: 200m
     limits:
       memory: 1024Mi
-      cpu: 1
+      cpu: "1"
   affinity:
     nodeAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
@@ -38,3 +38,19 @@ main:
 
 webhook:
   url: "https://n8n.home.lobotechworks.pt"
+
+ingress:
+  enabled: true
+  className: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: cloudflare-cluster-issuer
+    traefik.ingress.kubernetes.io/router.tls: "true"
+  hosts:
+    - host: n8n.home.lobotechworks.pt
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: n8n-tls
+      hosts:
+        - n8n.home.lobotechworks.pt

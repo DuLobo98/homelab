@@ -1,6 +1,18 @@
 server:
   ingress:
-    enabled: false 
+    enabled: true
+    ingressClassName: traefik
+    hostname: argocd.home.lobotechworks.pt
+    path: /
+    pathType: Prefix
+    tls: false
+    extraTls:
+      - hosts:
+          - argocd.home.lobotechworks.pt
+        secretName: argocd-server-tls
+    annotations:
+      cert-manager.io/cluster-issuer: cloudflare-cluster-issuer
+      traefik.ingress.kubernetes.io/router.tls: "true"
   resources:
     requests:
       cpu: 250m
@@ -16,9 +28,6 @@ server:
             matchExpressions:
               - key: node-role.kubernetes.io/control-plane
                 operator: DoesNotExist
-  extraArgs:
-    - --insecure # Disable TLS because we're using Ingress with TLS termination
-
 applicationSet:
   enabled: true
   resources:
@@ -95,6 +104,8 @@ notifications:
   affinity: *preferNonControlPlane
 
 configs:
+  params:
+    server.insecure: true # Disable backend TLS because Ingress terminates it.
   cm:
     url: https://argocd.home.lobotechworks.pt
     kustomize.buildOptions: "--enable-helm"

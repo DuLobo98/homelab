@@ -4,7 +4,7 @@ defaultSettings:
   replicaSoftAntiAffinity: true
   nodeDownPodDeletionPolicy: "do-nothing"
   allowRecurringJobWhileVolumeDetached: true
-  createDefaultDiskLabeledNodes: true
+  createDefaultDiskLabeledNodes: false
   defaultLonghornStaticStorageClass: "longhorn"
   allowCollectingLonghornUsageMetrics: false
   storageMinimalAvailablePercentage: 10
@@ -14,7 +14,16 @@ defaultBackupStore:
   backupTargetCredentialSecret: rustfs-credentials
 
 ingress:
-  enabled: false
+  enabled: true
+  ingressClassName: traefik
+  host: longhorn.home.lobotechworks.pt
+  tls: true
+  tlsSecret: longhorn-frontend-tls
+  path: /
+  pathType: Prefix
+  annotations:
+    cert-manager.io/cluster-issuer: cloudflare-cluster-issuer
+    traefik.ingress.kubernetes.io/router.tls: "true"
 
 preUpgradeChecker:
   jobEnabled: false

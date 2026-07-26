@@ -1,0 +1,95 @@
+deployment:
+  replicas: 2
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+ingressClass:
+  enabled: true
+  isDefaultClass: true
+  name: traefik
+
+gateway:
+  enabled: false
+
+gatewayClass:
+  enabled: false
+
+api:
+  dashboard: true
+
+ingressRoute:
+  dashboard:
+    enabled: true
+    matchRule: Host(`traefik.home.lobotechworks.pt`) && (PathPrefix(`/dashboard`) || PathPrefix(`/api`))
+    entryPoints:
+      - websecure
+    tls:
+      secretName: traefik-dashboard-tls
+
+providers:
+  kubernetesCRD:
+    enabled: true
+  kubernetesIngress:
+    enabled: true
+    ingressClass: traefik
+    publishedService:
+      enabled: true
+  kubernetesGateway:
+    enabled: false
+
+ports:
+  web:
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+          permanent: true
+  websecure:
+    http:
+      tls:
+        enabled: true
+
+service:
+  type: LoadBalancer
+  annotations:
+    lbipam.cilium.io/ips: 192.168.1.200
+  labels:
+    homelab.lobotechworks.pt/load-balancer: ingress
+  spec:
+    externalTrafficPolicy: Cluster
+    loadBalancerClass: io.cilium/l2-announcer
+
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          topologyKey: kubernetes.io/hostname
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: traefik
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 64Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi
+
+extraObjects:
+  - apiVersion: cert-manager.io/v1
+    kind: Certificate
+    metadata:
+      name: traefik-dashboard
+      namespace: traefik
+    spec:
+      secretName: traefik-dashboard-tls
+      issuerRef:
+        name: cloudflare-cluster-issuer
+        kind: ClusterIssuer
+      dnsNames:
+        - traefik.home.lobotechworks.pt

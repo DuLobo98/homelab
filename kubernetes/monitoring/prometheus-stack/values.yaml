@@ -1,4 +1,19 @@
 prometheus:
+  ingress:
+    enabled: true
+    ingressClassName: traefik
+    annotations:
+      cert-manager.io/cluster-issuer: cloudflare-cluster-issuer
+      traefik.ingress.kubernetes.io/router.tls: "true"
+    hosts:
+      - prometheus.home.lobotechworks.pt
+    paths:
+      - /
+    pathType: Prefix
+    tls:
+      - secretName: prometheus-tls
+        hosts:
+          - prometheus.home.lobotechworks.pt
   prometheusSpec:
     externalUrl: https://prometheus.home.lobotechworks.pt
     retention: 15d
@@ -61,6 +76,21 @@ kubeEtcd:
   enabled: false
 
 alertmanager:
+  ingress:
+    enabled: true
+    ingressClassName: traefik
+    annotations:
+      cert-manager.io/cluster-issuer: cloudflare-cluster-issuer
+      traefik.ingress.kubernetes.io/router.tls: "true"
+    hosts:
+      - alertmanager.home.lobotechworks.pt
+    paths:
+      - /
+    pathType: Prefix
+    tls:
+      - secretName: alertmanager-tls
+        hosts:
+          - alertmanager.home.lobotechworks.pt
   alertmanagerSpec:
     externalUrl: https://alertmanager.home.lobotechworks.pt
     retention: 72h
@@ -106,7 +136,19 @@ grafana:
     userKey: admin-user
     passwordKey: admin-password
   ingress:
-    enabled: false
+    enabled: true
+    ingressClassName: traefik
+    annotations:
+      cert-manager.io/cluster-issuer: cloudflare-cluster-issuer
+      traefik.ingress.kubernetes.io/router.tls: "true"
+    hosts:
+      - grafana.home.lobotechworks.pt
+    path: /
+    pathType: Prefix
+    tls:
+      - secretName: grafana-tls
+        hosts:
+          - grafana.home.lobotechworks.pt
   serviceMonitor:
     labels: *prometheusInstance
   resources:

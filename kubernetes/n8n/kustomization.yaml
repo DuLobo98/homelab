@@ -3,7 +3,6 @@ kind: Kustomization
 namespace: n8n
 resources:
   - namespace.yaml
-  - ingress.yaml
   - external-secret.yaml
 helmCharts:
   - name: n8n
