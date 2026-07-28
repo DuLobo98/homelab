@@ -24,6 +24,15 @@ certController:
       memory: 384Mi
   affinity: *preferNonControlPlane
 
+serviceMonitor:
+  enabled: true
+  additionalLabels:
+    prometheus: kube-prometheus-stack
+
+metrics:
+  service:
+    enabled: true
+
 webhook:
   resources:
     requests:

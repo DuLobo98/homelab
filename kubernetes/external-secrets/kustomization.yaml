@@ -4,6 +4,7 @@ namespace: external-secrets
 resources:
   - namespace.yaml
   - secret-store.yaml
+  - external-secrets-alerts.yaml
 helmCharts:
   - name: external-secrets
     repo: https://charts.external-secrets.io
