@@ -61,11 +61,11 @@ prometheus:
       matchLabels: *prometheusInstance
 
 kubeControllerManager:
-  # Talos exposes this endpoint only on loopback.
+  # Talos binds metrics to loopback
   enabled: false
 
 kubeScheduler:
-  # Talos exposes this endpoint only on loopback.
+  # Talos binds metrics to loopback
   enabled: false
 
 # Cilium replaces kube-proxy in this cluster.
@@ -73,7 +73,8 @@ kubeProxy:
   enabled: false
 
 kubeEtcd:
-  enabled: true
+  # Talos binds etcd metrics to loopback and does not expose discoverable pods.
+  enabled: false
 
 alertmanager:
   ingress:
