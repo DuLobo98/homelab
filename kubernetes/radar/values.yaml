@@ -1,0 +1,63 @@
+replicaCount: 1
+
+ingress:
+  enabled: true
+  className: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: cloudflare-cluster-issuer
+    traefik.ingress.kubernetes.io/router.tls: "true"
+  hosts:
+    - host: radar.home.lobotechworks.pt
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: radar-tls
+      hosts:
+        - radar.home.lobotechworks.pt
+
+timeline:
+  storage: sqlite
+  retention: 168h
+  maxSize: 1Gi
+
+persistence:
+  enabled: true
+  storageClassName: longhorn
+  accessMode: ReadWriteOnce
+  size: 2Gi
+
+rbac:
+  helm: true
+  secrets: true
+  viewRBAC: true
+  viewWebhooks: true
+  podExec: true
+  podLogs: true
+  portForward: true
+  traffic: true
+  metrics: true
+  additionalRules:
+    - apiGroups:
+        - ""
+      resources:
+        - nodes
+      verbs:
+        - get
+        - list
+        - watch
+        - patch
+    - apiGroups:
+        - ""
+      resources:
+        - pods/eviction
+      verbs:
+        - create
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 256Mi
+  limits:
+    cpu: "1"
+    memory: 1Gi
