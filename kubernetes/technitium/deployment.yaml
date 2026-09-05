@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: technitium
+  labels:
+    app.kubernetes.io/name: technitium
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: technitium
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: technitium
+    spec:
+      containers:
+        - name: dns-server
+          image: docker.io/technitium/dns-server:15.4.0
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: DNS_SERVER_DOMAIN
+              value: ns1.dns.home.lobotechworks.pt
+            - name: DNS_SERVER_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: technitium-credentials
+                  key: admin-password
+            - name: DNS_SERVER_RECURSION
+              value: AllowOnlyForPrivateNetworks
+            - name: DNS_SERVER_FORWARDERS
+              value: cloudflare-dns.com (1.1.1.1),cloudflare-dns.com (1.0.0.1)
+            - name: DNS_SERVER_FORWARDER_PROTOCOL
+              value: Tls
+            - name: DNS_SERVER_LOG_FOLDER_PATH
+              value: /var/log/technitium/dns
+            - name: DNS_SERVER_LOG_MAX_LOG_FILE_DAYS
+              value: "30"
+          ports:
+            - name: dns-udp
+              containerPort: 53
+              protocol: UDP
+            - name: dns-tcp
+              containerPort: 53
+              protocol: TCP
+            - name: web-http
+              containerPort: 5380
+              protocol: TCP
+          readinessProbe:
+            tcpSocket:
+              port: dns-tcp
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: dns-tcp
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 1Gi
+          volumeMounts:
+            - name: data
+              mountPath: /etc/dns
+            - name: logs
+              mountPath: /var/log/technitium/dns
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: technitium-data
+        - name: logs
+          persistentVolumeClaim:
+            claimName: technitium-logs

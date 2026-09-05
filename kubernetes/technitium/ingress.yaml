@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: technitium
+  annotations:
+    cert-manager.io/cluster-issuer: cloudflare-cluster-issuer
+    traefik.ingress.kubernetes.io/router.tls: "true"
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - dns.home.lobotechworks.pt
+      secretName: technitium-tls
+  rules:
+    - host: dns.home.lobotechworks.pt
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: technitium-web
+                port:
+                  name: web-http
