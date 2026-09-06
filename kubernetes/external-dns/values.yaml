@@ -1,0 +1,45 @@
+provider:
+  name: rfc2136
+
+# Only ingress hostnames in the private Technitium zone are managed.
+sources:
+  - ingress
+domainFilters:
+  - home.lobotechworks.pt
+managedRecordTypes:
+  - A
+
+# TXT ownership records prevent this instance from modifying records owned by
+# another ExternalDNS installation.
+registry: txt
+txtOwnerId: homelab
+txtPrefix: external-dns-
+policy: sync
+interval: 1m
+
+extraArgs:
+  rfc2136-host: technitium.technitium.svc.cluster.local
+  rfc2136-port: 53
+  rfc2136-zone: home.lobotechworks.pt
+  rfc2136-tsig-secret-alg: hmac-sha256
+  rfc2136-tsig-axfr: true
+
+env:
+  - name: EXTERNAL_DNS_RFC2136_TSIG_KEYNAME
+    valueFrom:
+      secretKeyRef:
+        name: technitium-credentials
+        key: tsig-keyname
+  - name: EXTERNAL_DNS_RFC2136_TSIG_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: technitium-credentials
+        key: tsig-secret
+
+resources:
+  requests:
+    cpu: 10m
+    memory: 32Mi
+  limits:
+    cpu: 100m
+    memory: 128Mi
