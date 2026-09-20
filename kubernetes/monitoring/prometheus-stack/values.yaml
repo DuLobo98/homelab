@@ -3,7 +3,7 @@ prometheus:
     enabled: true
     ingressClassName: traefik
     annotations:
-      cert-manager.io/cluster-issuer: cloudflare-cluster-issuer
+      cert-manager.io/cluster-issuer: letsencrypt-cluster-issuer
       traefik.ingress.kubernetes.io/router.tls: "true"
     hosts:
       - prometheus.home.lobotechworks.pt
@@ -81,7 +81,7 @@ alertmanager:
     enabled: true
     ingressClassName: traefik
     annotations:
-      cert-manager.io/cluster-issuer: cloudflare-cluster-issuer
+      cert-manager.io/cluster-issuer: letsencrypt-cluster-issuer
       traefik.ingress.kubernetes.io/router.tls: "true"
     hosts:
       - alertmanager.home.lobotechworks.pt
@@ -140,7 +140,7 @@ grafana:
     enabled: true
     ingressClassName: traefik
     annotations:
-      cert-manager.io/cluster-issuer: cloudflare-cluster-issuer
+      cert-manager.io/cluster-issuer: letsencrypt-cluster-issuer
       traefik.ingress.kubernetes.io/router.tls: "true"
     hosts:
       - grafana.home.lobotechworks.pt

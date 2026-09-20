@@ -87,7 +87,7 @@ extraObjects:
     spec:
       secretName: traefik-dashboard-tls
       issuerRef:
-        name: cloudflare-cluster-issuer
+        name: letsencrypt-cluster-issuer
         kind: ClusterIssuer
       dnsNames:
         - traefik.home.lobotechworks.pt

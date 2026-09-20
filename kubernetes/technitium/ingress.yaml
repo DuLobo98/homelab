@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: technitium
   annotations:
-    cert-manager.io/cluster-issuer: cloudflare-cluster-issuer
+    cert-manager.io/cluster-issuer: letsencrypt-cluster-issuer
     traefik.ingress.kubernetes.io/router.tls: "true"
 spec:
   ingressClassName: traefik

@@ -4,7 +4,7 @@ ingress:
   enabled: true
   className: traefik
   annotations:
-    cert-manager.io/cluster-issuer: cloudflare-cluster-issuer
+    cert-manager.io/cluster-issuer: letsencrypt-cluster-issuer
     traefik.ingress.kubernetes.io/router.tls: "true"
   hosts:
     - host: radar.home.lobotechworks.pt
