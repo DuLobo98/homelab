@@ -1,9 +1,9 @@
 provider:
   name: rfc2136
 
-# Only ingress hostnames in the private Technitium zone are managed.
 sources:
   - ingress
+  - gateway-httproute
 domainFilters:
   - home.lobotechworks.pt
 managedRecordTypes:

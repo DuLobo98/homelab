@@ -11,10 +11,28 @@ ingressClass:
   name: traefik
 
 gateway:
-  enabled: false
+  enabled: true
+  name: internal
+  namespace: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-cluster-issuer
+  listeners:
+    web: null
+    websecure:
+      port: 8443
+      hostname: "*.home.lobotechworks.pt"
+      protocol: HTTPS
+      namespacePolicy:
+        from: All
+      certificateRefs:
+        - name: internal-gateway-tls
+          kind: Secret
+          group: ""
+      mode: Terminate
 
 gatewayClass:
-  enabled: false
+  enabled: true
+  name: traefik
 
 api:
   dashboard: true
@@ -37,7 +55,12 @@ providers:
     publishedService:
       enabled: true
   kubernetesGateway:
-    enabled: false
+    enabled: true
+    statusAddress:
+      service:
+        enabled: true
+        name: traefik
+        namespace: traefik
 
 ports:
   web:
