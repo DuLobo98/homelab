@@ -10,6 +10,11 @@ l2announcements:
 
 hubble:
   enabled: true
+  tls:
+    auto:
+      # Helm generates a new CA on every render, which is incompatible with
+      # Argo CD reconciliation. Cilium's certgen job reuses cilium-ca instead.
+      method: cronJob
   relay:
     enabled: true
     rollOutPods: true
