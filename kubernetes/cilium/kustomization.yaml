@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - main-load-balancer-ip-pool.yaml
   - main-l2-announcement-policy.yaml
+  - hubble-httproute.yaml
 helmCharts:
   - name: cilium
     repo: https://helm.cilium.io/

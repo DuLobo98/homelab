@@ -8,6 +8,15 @@ k8sServicePort: 7445
 l2announcements:
   enabled: true
 
+hubble:
+  enabled: true
+  relay:
+    enabled: true
+    rollOutPods: true
+  ui:
+    enabled: true
+    rollOutPods: true
+
 rollOutCiliumPods: true
 
 operator:
