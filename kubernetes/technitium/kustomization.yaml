@@ -5,7 +5,7 @@ resources:
   - external-secret.yaml
   - dns-service.yaml
   - web-service.yaml
-  - ingress.yaml
+  - httproute.yaml
   - pvc.yaml
   - logs-pvc.yaml
   - deployment.yaml

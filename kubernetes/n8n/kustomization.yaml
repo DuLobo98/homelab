@@ -4,6 +4,7 @@ namespace: n8n
 resources:
   - namespace.yaml
   - external-secret.yaml
+  - httproute.yaml
 helmCharts:
   - name: n8n
     repo: https://community-charts.github.io/helm-charts

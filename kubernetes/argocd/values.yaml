@@ -1,18 +1,6 @@
 server:
   ingress:
-    enabled: true
-    ingressClassName: traefik
-    hostname: argocd.home.lobotechworks.pt
-    path: /
-    pathType: Prefix
-    tls: false
-    extraTls:
-      - hosts:
-          - argocd.home.lobotechworks.pt
-        secretName: argocd-server-tls
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-cluster-issuer
-      traefik.ingress.kubernetes.io/router.tls: "true"
+    enabled: false
   resources:
     requests:
       cpu: 250m
@@ -105,7 +93,7 @@ notifications:
 
 configs:
   params:
-    server.insecure: true # Disable backend TLS because Ingress terminates it.
+    server.insecure: true # Disable backend TLS because the Gateway terminates it.
   cm:
     url: https://argocd.home.lobotechworks.pt
     kustomize.buildOptions: "--enable-helm"

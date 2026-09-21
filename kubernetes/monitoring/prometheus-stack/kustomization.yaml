@@ -6,7 +6,9 @@ kind: Kustomization
 # kube-controller-manager, kube-scheduler, kube-proxy)
 resources:
   - namespace.yaml
+  - alertmanager-httproute.yaml
   - grafana-httproute.yaml
+  - prometheus-httproute.yaml
   - grafana-external-secret.yaml
   - proxmox-scrapeconfig.yaml
   - alertmanager-discord-external-secret.yaml

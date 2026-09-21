@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: radar
 resources:
   - namespace.yaml
+  - httproute.yaml
 helmCharts:
   - name: radar
     repo: https://skyhook-io.github.io/helm-charts

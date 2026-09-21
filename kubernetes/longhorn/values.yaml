@@ -16,16 +16,7 @@ defaultBackupStore:
   backupTargetCredentialSecret: rustfs-credentials
 
 ingress:
-  enabled: true
-  ingressClassName: traefik
-  host: longhorn.home.lobotechworks.pt
-  tls: true
-  tlsSecret: longhorn-frontend-tls
-  path: /
-  pathType: Prefix
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-cluster-issuer
-    traefik.ingress.kubernetes.io/router.tls: "true"
+  enabled: false
 
 preUpgradeChecker:
   jobEnabled: false

@@ -1,19 +1,6 @@
 prometheus:
   ingress:
-    enabled: true
-    ingressClassName: traefik
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-cluster-issuer
-      traefik.ingress.kubernetes.io/router.tls: "true"
-    hosts:
-      - prometheus.home.lobotechworks.pt
-    paths:
-      - /
-    pathType: Prefix
-    tls:
-      - secretName: prometheus-tls
-        hosts:
-          - prometheus.home.lobotechworks.pt
+    enabled: false
   prometheusSpec:
     externalUrl: https://prometheus.home.lobotechworks.pt
     retention: 15d
@@ -78,20 +65,7 @@ kubeEtcd:
 
 alertmanager:
   ingress:
-    enabled: true
-    ingressClassName: traefik
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-cluster-issuer
-      traefik.ingress.kubernetes.io/router.tls: "true"
-    hosts:
-      - alertmanager.home.lobotechworks.pt
-    paths:
-      - /
-    pathType: Prefix
-    tls:
-      - secretName: alertmanager-tls
-        hosts:
-          - alertmanager.home.lobotechworks.pt
+    enabled: false
   alertmanagerSpec:
     externalUrl: https://alertmanager.home.lobotechworks.pt
     retention: 72h

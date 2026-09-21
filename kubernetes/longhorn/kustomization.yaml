@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: longhorn-system
 resources:
   - namespace.yaml
+  - httproute.yaml
   - backup.yaml
   - critical-storageclass.yaml
   - rustfs-external-secret.yaml

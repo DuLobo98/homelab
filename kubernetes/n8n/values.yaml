@@ -40,17 +40,4 @@ webhook:
   url: "https://n8n.home.lobotechworks.pt"
 
 ingress:
-  enabled: true
-  className: traefik
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-cluster-issuer
-    traefik.ingress.kubernetes.io/router.tls: "true"
-  hosts:
-    - host: n8n.home.lobotechworks.pt
-      paths:
-        - path: /
-          pathType: Prefix
-  tls:
-    - secretName: n8n-tls
-      hosts:
-        - n8n.home.lobotechworks.pt
+  enabled: false
