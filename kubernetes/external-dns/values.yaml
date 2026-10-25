@@ -2,6 +2,7 @@ provider:
   name: rfc2136
 
 sources:
+  - crd
   - ingress
   - gateway-httproute
 domainFilters:

@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: external-dns
 resources:
   - namespace.yaml
+  - nas-dnsendpoint.yaml
   - technitium-external-secret.yaml
 helmCharts:
   - name: external-dns
@@ -10,4 +11,5 @@ helmCharts:
     version: 1.21.1
     releaseName: external-dns
     namespace: external-dns
+    includeCRDs: true
     valuesFile: values.yaml
