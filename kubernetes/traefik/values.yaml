@@ -37,6 +37,18 @@ gatewayClass:
 api:
   dashboard: true
 
+metrics:
+  prometheus:
+    service:
+      enabled: true
+    serviceMonitor:
+      enabled: true
+      # Preserve Traefik's service metric label, otherwise Prometheus
+      # overwrites it with the Kubernetes Service name `traefik-metrics`
+      honorLabels: true
+      additionalLabels:
+        prometheus: kube-prometheus-stack
+
 ingressRoute:
   dashboard:
     enabled: false

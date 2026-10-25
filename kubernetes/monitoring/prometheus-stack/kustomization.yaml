@@ -29,3 +29,11 @@ configMapGenerator:
       disableNameSuffixHash: true
       labels:
         grafana_dashboard: "1"
+  - name: traefik-grafana-dashboards
+    namespace: prometheus-stack
+    files:
+      - dashboards/generated/traefik/traefik.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"
