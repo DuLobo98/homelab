@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: nfs-csi
+  labels:
+    # The CSI node plugin needs host mounts and privileged access to mount NFS
+    # volumes on behalf of workloads.
+    pod-security.kubernetes.io/enforce: privileged
+    pod-security.kubernetes.io/warn: privileged
+    pod-security.kubernetes.io/audit: privileged
