@@ -3,6 +3,9 @@ replicaCount: 1
 ingress:
   enabled: false
 
+allowedHosts:
+  - radar.home.lobotechworks.pt
+
 timeline:
   storage: sqlite
   retention: 168h
