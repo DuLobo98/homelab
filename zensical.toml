@@ -1,6 +1,7 @@
 [project]
 site_name = "Lobo Tech Works Homelab"
 site_description = "Infrastructure, operations, and recovery documentation."
+site_url = "https://dulobo98.github.io/homelab/"
 repo_url = "https://github.com/DuLobo98/homelab"
 repo_name = "DuLobo98/homelab"
 edit_uri = "edit/main/docs/"
