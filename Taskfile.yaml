@@ -7,6 +7,24 @@ tasks:
     cmds:
       - task --list
 
+  docs:serve:
+    desc: Preview the documentation site locally at http://localhost:8000
+    silent: true
+    preconditions:
+      - sh: command -v uv >/dev/null 2>&1
+        msg: "uv is required; run 'mise install' first"
+    cmds:
+      - uv run --group docs zensical serve
+
+  docs:build:
+    desc: Build the static documentation site into site/
+    silent: true
+    preconditions:
+      - sh: command -v uv >/dev/null 2>&1
+        msg: "uv is required; run 'mise install' first"
+    cmds:
+      - uv run --group docs zensical build
+
   op:generate:
     desc: Inject all 1Password templates (*.op.tpl → same name without .op.tpl).
     silent: true

@@ -7,6 +7,7 @@ task = "3.52"
 jq = "1.8"
 talosctl = "1.13"
 cilium-cli = "0.19"
+uv = "0.10"
 
 [env]
 KUBECONFIG = "{{config_root}}/.kubeconfig/config"

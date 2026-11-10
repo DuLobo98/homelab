@@ -25,3 +25,8 @@ charts/
 
 # Environment Variables
 .env
+
+# Documentation build output
+site/
+.cache/
+.venv/

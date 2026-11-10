@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="560" viewBox="0 0 1440 560" role="img" aria-labelledby="title desc">
+  <title id="title">Lobo Tech Works Homelab architecture</title>
+  <desc id="desc">Infrastructure, GitOps, secrets, networking, workloads, and storage paths.</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#495057"/></marker></defs>
+  <style>text{font-family:Inter,Arial,sans-serif;fill:#1e1e1e}.h{font-size:15px;font-weight:700;fill:#495057}.b{font-size:17px;font-weight:700}.s{font-size:14px}.box{stroke:#1e1e1e;stroke-width:2;rx:10}.line{stroke:#495057;stroke-width:2;fill:none;marker-end:url(#arrow)}</style>
+  <text class="h" x="40" y="42">ACCESS AND INFRASTRUCTURE</text><text class="h" x="40" y="242">DELIVERY</text><text class="h" x="40" y="412">SECRETS AND DATA</text>
+  <rect class="box" x="40" y="65" width="190" height="70" fill="#d0ebff"/><text class="b" x="135" y="94" text-anchor="middle">Remote administration</text><text class="s" x="135" y="116" text-anchor="middle">Tailscale</text>
+  <rect class="box" x="320" y="65" width="210" height="70" fill="#d3f9d8"/><text class="b" x="425" y="94" text-anchor="middle">Proxmox cluster</text><text class="s" x="425" y="116" text-anchor="middle">pve-01 · pve-02 · pve-03</text>
+  <rect class="box" x="610" y="65" width="220" height="70" fill="#d3f9d8"/><text class="b" x="720" y="94" text-anchor="middle">Talos Kubernetes</text><text class="s" x="720" y="116" text-anchor="middle">3 control-plane nodes</text>
+  <rect class="box" x="900" y="65" width="200" height="70" fill="#e5dbff"/><text class="b" x="1000" y="94" text-anchor="middle">Cilium</text><text class="s" x="1000" y="116" text-anchor="middle">CNI · L2 · Hubble</text>
+  <rect class="box" x="40" y="265" width="190" height="70" fill="#fff3bf"/><text class="b" x="135" y="307" text-anchor="middle">GitHub main</text>
+  <rect class="box" x="610" y="265" width="220" height="70" fill="#fff3bf"/><text class="b" x="720" y="307" text-anchor="middle">Argo CD GitOps</text>
+  <rect class="box" x="900" y="215" width="200" height="70" fill="#e5dbff"/><text class="b" x="1000" y="244" text-anchor="middle">Traefik Gateway</text><text class="s" x="1000" y="266" text-anchor="middle">TLS and HTTPRoute</text>
+  <rect class="box" x="1200" y="185" width="220" height="110" fill="#ffe8cc"/><text class="b" x="1310" y="216" text-anchor="middle">Platform and workloads</text><text class="s" x="1310" y="240" text-anchor="middle">Technitium · n8n · Radar</text><text class="s" x="1310" y="262" text-anchor="middle">Monitoring · Media</text>
+  <rect class="box" x="40" y="435" width="190" height="70" fill="#ffd8a8"/><text class="b" x="135" y="477" text-anchor="middle">1Password</text>
+  <rect class="box" x="320" y="435" width="210" height="70" fill="#ffd8a8"/><text class="b" x="425" y="464" text-anchor="middle">External Secrets</text><text class="s" x="425" y="486" text-anchor="middle">Operator</text>
+  <rect class="box" x="900" y="435" width="200" height="70" fill="#d0bfff"/><text class="b" x="1000" y="464" text-anchor="middle">Longhorn</text><text class="s" x="1000" y="486" text-anchor="middle">Persistent volumes</text>
+  <rect class="box" x="1200" y="435" width="220" height="70" fill="#d0bfff"/><text class="b" x="1310" y="464" text-anchor="middle">RustFS on NAS</text><text class="s" x="1310" y="486" text-anchor="middle">S3 backup target</text>
+  <path class="line" d="M230 100 H320"/><path class="line" d="M530 100 H610"/><path class="line" d="M830 100 H900"/>
+  <path class="line" d="M230 300 H610"/><path class="line" d="M830 300 L1200 240"/>
+  <path class="line" d="M230 470 H320"/><path class="line" d="M530 470 L1200 245"/>
+  <path class="line" d="M1000 135 V215"/><path class="line" d="M1100 250 H1200"/>
+  <path class="line" d="M1310 295 L1000 435"/><path class="line" d="M1100 470 H1200"/>
+</svg>
