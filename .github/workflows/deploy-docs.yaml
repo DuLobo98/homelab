@@ -1,15 +1,15 @@
 name: Deploy documentation
 
 on:
-  push:
+  pull_request:
     branches: [main]
+    types: [closed]
     paths:
       - "docs/**"
       - "zensical.toml"
       - "pyproject.toml"
       - "uv.lock"
       - ".github/workflows/deploy-docs.yaml"
-  workflow_dispatch:
 
 permissions:
   contents: read
@@ -22,6 +22,7 @@ concurrency:
 
 jobs:
   build:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
