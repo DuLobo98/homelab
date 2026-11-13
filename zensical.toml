@@ -26,6 +26,7 @@ nav = [
   { "Operations" = [
     { "Bootstrap" = "bootstrap.md" },
     { "Health checks" = "operations/health-checks.md" },
+    { "Tailscale service sharing" = "operations/tailscale-service-sharing.md" },
     { "Alerting" = "operations/alerting.md" },
     { "Backups and recovery" = "operations/backups-and-recovery.md" },
     { "Runbooks" = [
