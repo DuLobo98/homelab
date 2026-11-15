@@ -6,7 +6,7 @@ helm = "3.22.1"
 kustomize = "5.8"
 task = "3.52"
 jq = "1.8"
-talosctl = "1.13"
+talosctl = "1.14.6"
 cilium-cli = "0.20.2"
 uv = "0.13.7"
 
