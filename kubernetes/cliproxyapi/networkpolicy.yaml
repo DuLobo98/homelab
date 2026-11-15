@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: cliproxyapi
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: cliproxyapi
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              homelab.lobotechworks.pt/cliproxyapi-client: "true"
+      ports:
+        - protocol: TCP
+          port: http

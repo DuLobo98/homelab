@@ -14,7 +14,7 @@ The root is therefore the control point for desired state. Direct cluster change
 | 0 | Argo CD, External Secrets, Gateway API, metrics-server, NFS CSI | Core controllers and CRDs. |
 | 1 | cert-manager, Traefik | TLS and ingress depend on the preceding controllers. |
 | 2 | Longhorn | Persistent volume capability. |
-| 3 | n8n, Prometheus stack, Radar, Technitium | Stateful and observability workloads. |
+| 3 | CLIProxyAPI, n8n, Prometheus stack, Radar, Technitium | Stateful and observability workloads. |
 | 4 | ExternalDNS, Media | DNS reconciliation and the separately sourced media application. |
 
 Sync waves express ordering, not a guarantee that every dependency is healthy. Use Argo CD health status before treating an application change as complete.

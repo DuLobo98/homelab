@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cliproxyapi
+  labels:
+    # Allows workloads in this namespace to use the in-cluster API.
+    homelab.lobotechworks.pt/cliproxyapi-client: "true"
