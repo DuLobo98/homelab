@@ -1,0 +1,46 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:best-practices"],
+  "timezone": "UTC",
+  // "schedule": ["* 1-7 * * *"],
+  "prConcurrentLimit": 0,
+  "prHourlyLimit": 0,
+  "minimumReleaseAge": "3 days",
+  "minimumReleaseAgeBehaviour": "timestamp-required",
+  "internalChecksFilter": "strict",
+  "argocd": {
+    "managerFilePatterns": ["/^kubernetes\\/argocd\\/.+\\.ya?ml$/"]
+  },
+  "kubernetes": {
+    "managerFilePatterns": ["/^kubernetes\\/.+\\.ya?ml$/"]
+  },
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Update dependencies explicitly annotated with Renovate metadata",
+      "managerFilePatterns": [
+        "/^Taskfile\\.yaml$/",
+        "/^kubernetes\\/.+\\/kustomization\\.ya?ml$/"
+      ],
+      "matchStrings": [
+        "#\\s*renovate:\\s*datasource=(?<datasource>[a-zA-Z0-9-._]+)\\s+depName=(?<depName>[^\\s]+)(?:\\s+versioning=(?<versioning>[^\\s]+))?(?:\\s+registryUrl=(?<registryUrl>[^\\s]+))?[\\s\\S]*?(?<currentValue>v?\\d+(?:\\.\\d+)+(?:[-+][0-9A-Za-z.-]+)?)"
+      ]
+    }
+  ],
+  "major": {
+    "dependencyDashboardApproval": true
+  },
+  "packageRules": [
+    {
+      "description": "Automerge minor updates after the stability gate passes",
+      "matchUpdateTypes": ["minor"],
+      "automerge": true,
+      "ignoreTests": true
+    },
+    {
+      "description": "Keep Kubernetes API migrations under deliberate GitOps control",
+      "matchDatasources": ["kubernetes-api"],
+      "enabled": false
+    }
+  ]
+}

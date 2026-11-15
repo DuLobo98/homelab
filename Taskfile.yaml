@@ -121,6 +121,7 @@ tasks:
 
         echo "Installing Argo CD..."
         kubectl apply -f "$REPO_ROOT/kubernetes/argocd/namespace.yaml"
+        # renovate: datasource=helm depName=argo-cd versioning=helm registryUrl=https://argoproj.github.io/argo-helm
         helm template argocd argo-cd \
           --repo https://argoproj.github.io/argo-helm \
           --version "9.1.3" \
