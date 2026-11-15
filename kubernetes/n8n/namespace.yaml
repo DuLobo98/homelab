@@ -3,4 +3,4 @@ kind: Namespace
 metadata:
   name: n8n
   labels:
-    homelab.lobotechworks.pt/cliproxyapi-client=true
+    homelab.lobotechworks.pt/cliproxyapi-client: "true"
