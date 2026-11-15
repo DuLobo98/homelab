@@ -4,7 +4,7 @@ Application definitions are declared under `kubernetes/` and registered through 
 
 | Application | Interface | Purpose |
 | --- | --- | --- |
-| CLIProxyAPI | `http://cliproxyapi.cliproxyapi.svc.cluster.local:8317/v1` | Authenticated AI API proxy for opted-in cluster workloads |
+| CLIProxyAPI | <https://cliproxyapi.home.lobotechworks.pt/management.html> | Authenticated AI API proxy and management UI |
 | n8n | <https://n8n.home.lobotechworks.pt> | Workflow automation |
 | Radar | <https://radar.home.lobotechworks.pt> | Kubernetes operations interface |
 | Media | — | Private workload delivery |

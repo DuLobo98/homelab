@@ -6,5 +6,6 @@ resources:
   - external-secret.yaml
   - pvc.yaml
   - service.yaml
+  - httproute.yaml
   - networkpolicy.yaml
   - deployment.yaml

@@ -35,6 +35,8 @@ spec:
                 secretKeyRef:
                   name: cliproxyapi-config
                   key: management-password
+            - name: MANAGEMENT_STATIC_PATH
+              value: /data/static
             - name: TZ
               value: UTC
           ports:
