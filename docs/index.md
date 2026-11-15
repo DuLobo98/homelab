@@ -7,7 +7,8 @@ This is the operational manual for the homelab declared in this repository. The 
 | Layer | Implementation |
 | --- | --- |
 | Virtualisation | Proxmox VE |
-| Kubernetes operating system | Talos Linux |
+| Kubernetes | v1.36.2 |
+| Kubernetes operating system | Talos Linux v1.13.7 |
 | Delivery | Argo CD app-of-apps from GitHub `main` |
 | Networking | Cilium L2, Traefik, Gateway API, Technitium DNS |
 | Secrets | 1Password and External Secrets Operator |
