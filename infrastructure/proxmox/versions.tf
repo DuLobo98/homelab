@@ -8,7 +8,7 @@ terraform {
     }
     talos = {
       source  = "siderolabs/talos"
-      version = "0.12.0-alpha.5"
+      version = "0.12.0"
     }
     onepassword = {
       source  = "1Password/onepassword"
