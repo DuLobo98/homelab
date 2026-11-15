@@ -8,7 +8,7 @@ resources:
 helmCharts:
   - name: n8n
     repo: https://community-charts.github.io/helm-charts
-    version: "1.24.0"
+    version: "1.24.43"
     releaseName: n8n
     namespace: n8n
     valuesFile: values.yaml
