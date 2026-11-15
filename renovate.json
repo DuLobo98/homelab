@@ -32,8 +32,8 @@
   },
   "packageRules": [
     {
-      "description": "Automerge minor updates after the stability gate passes",
-      "matchUpdateTypes": ["minor"],
+      "description": "Automerge patch updates after the stability gate passes",
+      "matchUpdateTypes": ["patch"],
       "automerge": true,
       "ignoreTests": true
     },
