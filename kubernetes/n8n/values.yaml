@@ -13,6 +13,7 @@ main:
   editorBaseUrl: "https://n8n.home.lobotechworks.pt"
   extraEnvVars:
     N8N_BASIC_AUTH_ACTIVE: "true"
+    NODES_EXCLUDE: '["n8n-nodes-base.localFileTrigger"]'
   extraSecretNamesForEnvFrom:
     - n8n-credentials
   persistence:
