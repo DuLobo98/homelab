@@ -124,7 +124,7 @@ tasks:
         # renovate: datasource=helm depName=argo-cd versioning=helm registryUrl=https://argoproj.github.io/argo-helm
         helm template argocd argo-cd \
           --repo https://argoproj.github.io/argo-helm \
-          --version "9.1.3" \
+          --version "9.7.1" \
           --namespace argocd \
           --include-crds \
           --values "$REPO_ROOT/kubernetes/argocd/values.yaml" |
