@@ -25,7 +25,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: cliproxyapi
-          image: eceasy/cli-proxy-api:v8.0.80@sha256:0695ae8721d623ed31179369fc7127d469f10a14a37a49c366e82a16383662f8
+          image: eceasy/cli-proxy-api:v8.1.4@sha256:32fb7dfc272bf63daee4dcaaa679095aad431ceed31416f98ea55f3d1d7db77a
           imagePullPolicy: IfNotPresent
           env:
             - name: HOME
